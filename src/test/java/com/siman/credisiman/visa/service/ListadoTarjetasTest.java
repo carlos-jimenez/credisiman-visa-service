@@ -20,7 +20,7 @@ public class ListadoTarjetasTest {
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
         
         //Data
-        XmlObject[] tarjetas = result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:tarjetas//ns:tarjeta");
+        XmlObject[] tarjetas = result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:tarjetas");
         while (i < tarjetas.length) {
         	String numeroTarjeta = ((SimpleValue) tarjetas[i].selectPath( "declare namespace ns='" + NS + "' " + ".//ns:numeroTarjeta")[0]).getStringValue();
         	assertEquals(listadoTarjetas[i], numeroTarjeta);

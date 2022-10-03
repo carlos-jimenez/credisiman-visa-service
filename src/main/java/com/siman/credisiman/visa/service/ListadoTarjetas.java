@@ -24,10 +24,9 @@ public class ListadoTarjetas {
 		cursor.insertElementWithText(new QName(namespace, "statusCode"), "00");
 		cursor.insertElementWithText(new QName(namespace, "status"), "SUCCESS");
 		cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Proceso exitoso");
-		cursor.beginElement(new QName(namespace, "tarjetas"));
-		for (String numerTarjeta : listadoTarjetas) {
-			cursor.beginElement(new QName(namespace, "tarjeta"));
-			cursor.insertElementWithText(new QName(namespace, "numeroTarjeta"), numerTarjeta);
+		for (String numeroTarjeta : listadoTarjetas) {
+			cursor.beginElement(new QName(namespace, "tarjetas"));
+			cursor.insertElementWithText(new QName(namespace, "numeroTarjeta"), numeroTarjeta);
 			cursor.insertElementWithText(new QName(namespace, "cuenta"), "12345");
 			cursor.insertElementWithText(new QName(namespace, "tipoTarjeta"), "Titular");
 			cursor.insertElementWithText(new QName(namespace, "nombreTH"), "JUAN PEREZ");

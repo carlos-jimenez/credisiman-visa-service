@@ -10,7 +10,9 @@ import javax.xml.namespace.QName;
 public class ModificarLimiteTarjeta {
     private static Logger log = LoggerFactory.getLogger(ListadoTarjetas.class);
 
-    public static XmlObject modificarLimiteTarjeta(String pais, String identificacion,String monto, String remoteJndi) {
+	public static XmlObject modificarLimiteTarjeta(String pais, String identificacion, String monto,
+			String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
+			String binCredisiman) {
         String namespace = "http://siman.com/ModificarLimiteTarjeta";
         String operationResponse = "ModificarLimiteTarjetaResponse";
         //OBTENER DATOS

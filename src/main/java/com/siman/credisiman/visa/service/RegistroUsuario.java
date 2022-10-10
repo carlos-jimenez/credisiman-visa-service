@@ -16,7 +16,8 @@ public class RegistroUsuario {
 	public static XmlObject registroUsuario(String pais, String primerNombre, String segundoNombre,
 			String primerApellido, String segundoApellido, String apellidoCasada, String paisResidencia,
 			String fechaNacimiento, String tipoDocumento, String numeroDocumento, String correo, String celular,
-			String correoNotificacion, String celularNotificacion, String remoteJndi) {
+			String correoNotificacion, String celularNotificacion, String remoteJndiSunnel, String remoteJndiOrion,
+			String siscardUrl, String siscardUser, String binCredisiman) {
 
 		String namespace = "http://siman.com/RegistroUsuario";
 		String operationResponse = "RegistroUsuarioResponse";
@@ -40,7 +41,8 @@ public class RegistroUsuario {
 	public static XmlObject actualizarUsuario(String pais, String primerNombre, String segundoNombre,
 			String primerApellido, String segundoApellido, String apellidoCasada, String paisResidencia,
 			String fechaNacimiento, String tipoDocumento, String numeroDocumento, String correo, String celular,
-			String correoNotificacion, String celularNotificacion, String remoteJndi) {
+			String correoNotificacion, String celularNotificacion, String remoteJndiSunnel, String remoteJndiOrion,
+			String siscardUrl, String siscardUser, String binCredisiman) {
 
 		String namespace = "http://siman.com/RegistroUsuario";
 		String operationResponse = "ActualizarUsuarioResponse";
@@ -62,8 +64,9 @@ public class RegistroUsuario {
 	public static String registroUsuarioString(String pais, String primerNombre, String segundoNombre,
 			String primerApellido, String segundoApellido, String apellidoCasada, String paisResidencia,
 			String fechaNacimiento, String tipoDocumento, String numeroDocumento, String correo, String celular,
-			String correoNotificacion, String celularNotificacion, String remoteJndi) {
+			String correoNotificacion, String celularNotificacion, String remoteJndiSunnel, String remoteJndiOrion,
+			String siscardUrl, String siscardUser, String binCredisiman) {
 
-		return RegistroUsuario.registroUsuario(pais, primerNombre, segundoNombre, primerApellido, segundoApellido, apellidoCasada, paisResidencia, fechaNacimiento, tipoDocumento, numeroDocumento, correo, celular, correoNotificacion, celularNotificacion, remoteJndi).toString();
+		return RegistroUsuario.registroUsuario(pais, primerNombre, segundoNombre, primerApellido, segundoApellido, apellidoCasada, paisResidencia, fechaNacimiento, tipoDocumento, numeroDocumento, correo, celular, correoNotificacion, celularNotificacion, remoteJndiSunnel, remoteJndiOrion, siscardUrl, siscardUser, binCredisiman).toString();
 	}
 }

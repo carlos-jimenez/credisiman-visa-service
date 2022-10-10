@@ -15,7 +15,7 @@ public class ConsultaMovimientosTest {
 
         XmlObject result = ConsultaMovimientos.obtenerConsultaMovimientos("SLV",
                 "4000123456780000", "20220701", "20220731",
-                "jndi/ArcaSV");
+                "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
         int i = 0;
 
         //Status

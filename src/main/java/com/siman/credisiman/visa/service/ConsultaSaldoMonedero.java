@@ -10,8 +10,9 @@ import javax.xml.namespace.QName;
 public class ConsultaSaldoMonedero {
     private static final Logger log = LoggerFactory.getLogger(ConsultaSaldoMonedero.class);
 
-    public static XmlObject ConsultaSaldoMonedero(String pais, String numeroTarjeta, String cuenta,
-                                                        String fechaCorte, String remoteJndi) {
+	public static XmlObject obtenerConsultaSaldoMonedero(String pais, String numeroTarjeta, String cuenta,
+			String fechaCorte, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
+			String binCredisiman) {
         String namespace = "http://siman.com/ConsultaSaldoMonedero";
         String operationResponse = "ObtenerConsultaSaldoMonederoResponse";
         //OBTENER DATOS

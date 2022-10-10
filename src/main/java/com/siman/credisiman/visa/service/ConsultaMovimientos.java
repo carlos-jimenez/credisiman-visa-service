@@ -10,9 +10,9 @@ import javax.xml.namespace.QName;
 public class ConsultaMovimientos {
     private static Logger log = LoggerFactory.getLogger(ConsultaMovimientos.class);
 
-    public static XmlObject obtenerConsultaMovimientos(String pais, String numeroTarjeta,
-                                                       String fechaInicial, String fechaFinal,
-                                                       String remoteJndi) {
+	public static XmlObject obtenerConsultaMovimientos(String pais, String numeroTarjeta, String fechaInicial,
+			String fechaFinal, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
+			String binCredisiman) {
         String namespace = "http://siman.com/ConsultaMovimientos";
         String operationResponse = "ObtenerConsultaMovimientosResponse";
         String[] numeroAutorizacion = {"123456701", "123456702", "123456703"};

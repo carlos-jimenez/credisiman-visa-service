@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
 public class ListadoTarjetas {
 	private static Logger log = LoggerFactory.getLogger(ListadoTarjetas.class);
 
-	public static XmlObject obtenerListadoTarjetas(String pais, String identificacion, String remoteJndi) {
+	public static XmlObject obtenerListadoTarjetas(String pais, String identificacion, String remoteJndiSunnel,
+			String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
 		String namespace = "http://siman.com/ListadoTarjetas";
 		String operationResponse = "ObtenerListadoTarjetasResponse";
 		String[] listadoTarjetas = {"4000123456780000", "4000123456780001", "4000123456780002"};

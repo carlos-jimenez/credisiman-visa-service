@@ -12,7 +12,7 @@ public class ListadoEstadosCuentasTest {
 
     @Test
     public void obtenerListadoEstadosCuentasOk() {
-        XmlObject result = ListadoEstadosCuentas.obtenerListadoEstadosCuenta("SLV", "4000123456780000", "jndi/ArcaSV");
+        XmlObject result = ListadoEstadosCuentas.obtenerListadoEstadosCuenta("SLV", "4000123456780000", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
         int i = 0;
 
         //Status

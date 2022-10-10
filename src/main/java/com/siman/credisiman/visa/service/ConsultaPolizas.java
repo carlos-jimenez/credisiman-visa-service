@@ -10,7 +10,8 @@ import javax.xml.namespace.QName;
 public class ConsultaPolizas {
     private static Logger log = LoggerFactory.getLogger(ConsultaPolizas.class);
 
-    public static XmlObject obtenerConsultaPolizas(String pais, String numeroTarjeta, String remoteJndi) {
+	public static XmlObject obtenerConsultaPolizas(String pais, String numeroTarjeta, String remoteJndiSunnel,
+			String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
         String namespace = "http://siman.com/ConsultaPolizas";
         String operationResponse = "ObtenerConsultaPolizasResponse";
         String[] nombrePolizas = {"0011223344", "0011223345", "0011223346"};

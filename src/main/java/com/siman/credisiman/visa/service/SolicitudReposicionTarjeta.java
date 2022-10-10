@@ -10,7 +10,9 @@ import javax.xml.namespace.QName;
 public class SolicitudReposicionTarjeta {
     private static Logger log = LoggerFactory.getLogger(SolicitudReposicionTarjeta.class);
 
-    public static XmlObject SolicitudReposicionTarjeta(String pais, String numeroTarjeta, String nombreEmbozar,String razonReposicion, String remoteJndi) {
+	public static XmlObject crearSolicitudReposicionTarjeta(String pais, String numeroTarjeta, String nombreEmbozar,
+			String razonReposicion, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl,
+			String siscardUser, String binCredisiman) {
         String namespace = "http://siman.com/SolicitudReposicionTarjeta";
         String operationResponse = "ObtenerSolicitudReposicionTarjetaResponse";
         //OBTENER DATOS

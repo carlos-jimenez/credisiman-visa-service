@@ -10,7 +10,9 @@ import javax.xml.namespace.QName;
 public class BloqueoDesbloqueoTarjeta {
     private static final Logger log = LoggerFactory.getLogger(BloqueoDesbloqueoTarjeta.class);
 
-    public static XmlObject obtenerBloqueoDesbloqueoTarjeta(String pais, String numeroTarjeta,String estadoDeseado, String motivo, String remoteJndi) {
+	public static XmlObject obtenerBloqueoDesbloqueoTarjeta(String pais, String numeroTarjeta, String estadoDeseado,
+			String motivo, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
+			String binCredisiman) {
         String namespace = "http://siman.com/BloqueoDesbloqueoTarjeta";
         String operationResponse = "ObtenerBloqueoDesbloqueoTarjetaResponse";
         //OBTENER DATOS

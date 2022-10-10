@@ -1,23 +1,17 @@
 package com.siman.credisiman.visa.service;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.xmlbeans.SimpleValue;
-import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.xml.namespace.QName;
-
-import static org.junit.Assert.assertEquals;
 
 public class ConsultaSaldoMonederoTest {
     static private String NS = "http://siman.com/ConsultaSaldoMonedero";
 
     @Test
     public void obtenerDatosClienteOk() {
-        XmlObject result = ConsultaSaldoMonedero.ConsultaSaldoMonedero("SLV", "4000123456780000", "12345","20220718","jndi/ArcaSV");
-        int i = 0;
+        XmlObject result = ConsultaSaldoMonedero.obtenerConsultaSaldoMonedero("SLV", "4000123456780000", "12345","20220718","jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());

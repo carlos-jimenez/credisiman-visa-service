@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
 public class ConsultaDatosCliente {
 	private static Logger log = LoggerFactory.getLogger(ConsultaDatosCliente.class);
 	
-	public static XmlObject obtenerDatosCliente(String pais, String identificacion, String remoteJndi) {
+	public static XmlObject obtenerDatosCliente(String pais, String identificacion, String remoteJndiSunnel,
+			String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
 		String namespace = "http://siman.com/ConsultaDatosCliente";
 		String operationResponse = "ObtenerDatosClienteResponse";
 

@@ -11,7 +11,7 @@ public class ConsultaDatosClienteTest {
 
     @Test
     public void obtenerDatosClienteOk() {
-        XmlObject result = ConsultaDatosCliente.obtenerDatosCliente("SLV", "0398765432", "jndi/ArcaSV");
+        XmlObject result = ConsultaDatosCliente.obtenerDatosCliente("SLV", "0398765432", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
         
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());

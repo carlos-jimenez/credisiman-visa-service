@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/src/main/java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/siman/credisiman/visa/service/ListadoEstadosCuentas.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/test/java/com/siman/credisiman/visa/service/ConsultaDatosClienteTest.java" charset="windows-1252" />
   </component>
 </project>

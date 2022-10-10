@@ -36,8 +36,11 @@ public class ConsultaDatosCliente {
                     .asString();
 
             //capturar respuesta
-            JSONObject response = new JSONObject(jsonResponse.getBody().replaceAll("\u200B", ""));
-            response1 = new ObjectMapper().readValue(response.toString(), ConsultaDatosClienteResponse.class);
+            JSONObject response = new JSONObject(jsonResponse
+                    .getBody()
+                    .replaceAll("\u200B", ""));
+            response1 = new ObjectMapper()
+                    .readValue(response.toString(), ConsultaDatosClienteResponse.class);
 
             log.info(new ObjectMapper().writeValueAsString(response1));
         } catch (Exception e) {
@@ -59,7 +62,7 @@ public class ConsultaDatosCliente {
         cursor.insertElementWithText(new QName(namespace, "primerApellido"), response1.getPrimerApellido());
         cursor.insertElementWithText(new QName(namespace, "segundoApellido"), response1.getSegundoApellido());
         cursor.insertElementWithText(new QName(namespace, "apellidoCasada"), response1.getApellidoCasada());
-        cursor.insertElementWithText(new QName(namespace, "fechaNacimiento"), response1.getNacimiento()); //no esta
+        cursor.insertElementWithText(new QName(namespace, "fechaNacimiento"), response1.getNacimiento());
         cursor.insertElementWithText(new QName(namespace, "tipoIdentificacion"), response1.getTipoIdentificacion());
         cursor.insertElementWithText(new QName(namespace, "identificacion"), response1.getIdentificacion());
         cursor.insertElementWithText(new QName(namespace, "correo"), response1.getCorreoElectronico());

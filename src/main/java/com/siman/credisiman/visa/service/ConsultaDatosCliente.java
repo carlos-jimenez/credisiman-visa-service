@@ -6,14 +6,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.siman.credisiman.visa.dto.ConsultaDatosClienteResponse;
+import com.siman.credisiman.visa.utils.ConnectionHandler;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class ConsultaDatosCliente {
     private static final Logger log = LoggerFactory.getLogger(ConsultaDatosCliente.class);
+    static final String QUERY = "\n" +
+            "SELECT c.customerid AS niu, pc.firstname AS nombres, pc.lastname1 AS primerApellido, pc.lastname2 AS segundoApellido, pc.marriedname AS apellidoCasada, \n" +
+            "pc.birthdate AS fechaNacimiento, c.identificationtypeid AS tipoIdentificacion, c.identificationnumber AS numeroIdentificacion, \n" +
+            "(SELECT DISTINCT ea.email FROM sunnel.t_gemailaddress ea WHERE ea.customerid = c.customerid AND ea.addressid = (SELECT MAX(at.addressid) FROM sunnel.t_gemailaddress at WHERE at.customerid = ea.customerid)) AS correo,\n" +
+            "(SELECT DISTINCT p.phonenumber FROM sunnel.t_gphone p WHERE p.customerid =  c.customerid AND p.phoneid = (SELECT MAX(pt.phoneid) FROM sunnel.t_gphone pt WHERE pt.customerid = p.customerid)) AS celular,\n" +
+            "' ' AS lugarTrabajo,\n" +
+            "' ' AS direccion,\n" +
+            "' ' AS direccionTrabajo\n" +
+            "FROM\n" +
+            "sunnel.t_gcustomer c\n" +
+            "INNER JOIN sunnel.t_gpersoncustomer pc ON pc.customerid = c.customerid\n" +
+            "WHERE c.identificationnumber = '022504664'\n";
 
     public static XmlObject obtenerDatosCliente(String pais, String identificacion, String remoteJndiSunnel,
                                                 String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
@@ -48,6 +66,22 @@ public class ConsultaDatosCliente {
             log.info(e.getMessage());
         }
 
+        //instancia de conexion
+
+        try {
+            ConnectionHandler connectionHandler = new ConnectionHandler();
+            Connection conexion = connectionHandler.getConnection("jdbc/SUNTST");
+            Statement stmt = conexion.createStatement();
+            ResultSet rs = stmt.executeQuery(QUERY);
+
+            while(rs.next()){
+                //Display values
+                log.info("Nombres: " + rs.getInt("nombres"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
         XmlObject result = XmlObject.Factory.newInstance();
         XmlCursor cursor = result.newCursor();
@@ -66,8 +100,8 @@ public class ConsultaDatosCliente {
         cursor.insertElementWithText(new QName(namespace, "tipoIdentificacion"), response1.getTipoIdentificacion());
         cursor.insertElementWithText(new QName(namespace, "identificacion"), response1.getIdentificacion());
         cursor.insertElementWithText(new QName(namespace, "correo"), response1.getCorreoElectronico());
-        cursor.insertElementWithText(new QName(namespace, "celular"), response1.getCelular());
-        cursor.insertElementWithText(new QName(namespace, "lugarTrabajo"), "Almacenes Simán S.A. de C.V."); //no esta
+        cursor.insertElementWithText(new QName(namespace, "celular"), response1.getTelefonoCelular());
+        cursor.insertElementWithText(new QName(namespace, "lugarTrabajo"), response1.getNombrePatrono()); //no esta
         cursor.insertElementWithText(new QName(namespace, "direccion"), response1.getDireccion());
         cursor.insertElementWithText(new QName(namespace, "direccionPatrono"), response1.getDireccionPatrono());
         cursor.toParent();

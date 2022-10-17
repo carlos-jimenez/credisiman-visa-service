@@ -13,10 +13,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ConsultaDatosCliente {
     private static final Logger log = LoggerFactory.getLogger(ConsultaDatosCliente.class);
@@ -31,7 +28,7 @@ public class ConsultaDatosCliente {
             "FROM\n" +
             "sunnel.t_gcustomer c\n" +
             "INNER JOIN sunnel.t_gpersoncustomer pc ON pc.customerid = c.customerid\n" +
-            "WHERE c.identificationnumber = '022504664'\n";
+            "WHERE c.identificationnumber = ? ";
 
     public static XmlObject obtenerDatosCliente(String pais, String identificacion, String remoteJndiSunnel,
                                                 String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
@@ -60,7 +57,7 @@ public class ConsultaDatosCliente {
             response1 = new ObjectMapper()
                     .readValue(response.toString(), ConsultaDatosClienteResponse.class);
 
-            log.info(new ObjectMapper().writeValueAsString(response1));
+            //log.info(new ObjectMapper().writeValueAsString(response1));
         } catch (Exception e) {
             e.printStackTrace();
             log.info(e.getMessage());
@@ -71,12 +68,13 @@ public class ConsultaDatosCliente {
         try {
             ConnectionHandler connectionHandler = new ConnectionHandler();
             Connection conexion = connectionHandler.getConnection("jdbc/SUNTST");
-            Statement stmt = conexion.createStatement();
-            ResultSet rs = stmt.executeQuery(QUERY);
+            PreparedStatement sentencia= conexion.prepareStatement(QUERY);
+            sentencia.setString(1, "022504664");
+            ResultSet rs = sentencia.executeQuery();
 
             while(rs.next()){
                 //Display values
-                log.info("Nombres: " + rs.getInt("nombres"));
+                log.info("Nombres: " + rs.getString("nombres"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

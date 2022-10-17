@@ -7,6 +7,16 @@
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="siman-dependencies" />
+      <option name="name" value="Repositorio de las dependencias de siman" />
+      <option name="url" value="http://jira-dev.siman.co:8383/nexus/content/repositories/siman-dep-repo/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="siman-dependencies" />
+      <option name="name" value="Repositorio de las dependencias de siman" />
+      <option name="url" value="http://192.168.130.20:8383/nexus/content/repositories/siman-dep-repo/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="public-apache-repo" />
       <option name="name" value="Apache Repo" />
       <option name="url" value="https://repo.maven.apache.org/maven2/" />
@@ -24,7 +34,22 @@
     <remote-repository>
       <option name="id" value="siman-dependencies" />
       <option name="name" value="Repositorio de las dependencias de siman" />
+      <option name="url" value="http://10.100.1.11:8383/nexus/content/repositories/siman-dep-repo/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven.oracle.com" />
+      <option name="name" value="Oracle" />
+      <option name="url" value="https://maven.oracle.com" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="siman-dependencies" />
+      <option name="name" value="Repositorio de las dependencias de siman" />
       <option name="url" value="http://jira-dev.siman.com:8383/nexus/content/repositories/siman-dep-repo/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="http://jira-prod:8383/nexus/content/groups/public/" />
     </remote-repository>
   </component>
 </project>

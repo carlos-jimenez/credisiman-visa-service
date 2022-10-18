@@ -1,4 +1,4 @@
-package com.siman.credisiman.visa.dto;
+package com.siman.credisiman.visa.dto.datoscliente;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;

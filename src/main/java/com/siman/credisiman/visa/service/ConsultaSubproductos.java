@@ -3,7 +3,8 @@ package com.siman.credisiman.visa.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.siman.credisiman.visa.dto.ConsultaSubproductosResponse;
+import com.siman.credisiman.visa.dto.subproductos.ConsultaSubproductosResponse;
+import com.siman.credisiman.visa.dto.subproductos.SubProducto;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
@@ -21,7 +22,7 @@ public class ConsultaSubproductos {
         String operationResponse = "ObtenerConsultaSubproductosResponse";
         String[] fechasCompra = {"20220716", "20220717", "20220718"};
         ConsultaSubproductosResponse response1 = new ConsultaSubproductosResponse();
-        //OBTENER DATOS
+        //OBTENER DATOS TARJETA CREDISIMAN
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
             jsonSend.put("country", pais)
@@ -32,7 +33,7 @@ public class ConsultaSubproductos {
                     .put("numeroTarjeta", numeroTarjeta);
 
             HttpResponse<String> jsonResponse //realizar petición demiante unirest
-                    = Unirest.post(siscardUrl)
+                    = Unirest.post(siscardUrl.concat("/ConsultaSubProductosIntraExtra"))
                     .header("Content-Type", "application/json")
                     .body(jsonSend.toString())
                     .asString();
@@ -44,7 +45,6 @@ public class ConsultaSubproductos {
             response1 = new ObjectMapper()
                     .readValue(response.toString(), ConsultaSubproductosResponse.class);
 
-            log.info(new ObjectMapper().writeValueAsString(response1));
         } catch (Exception e) {
             e.printStackTrace();
             log.info(e.getMessage());
@@ -55,18 +55,22 @@ public class ConsultaSubproductos {
         QName responseQName = new QName(namespace, operationResponse);
         cursor.toNextToken();
         cursor.beginElement(responseQName);
-        cursor.insertElementWithText(new QName(namespace, "statusCode"), "00");
-        cursor.insertElementWithText(new QName(namespace, "status"), "SUCCESS");
-        cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Proceso exitoso");
-        for (String fechaCompra : fechasCompra) {
+
+        cursor.insertElementWithText(new QName(namespace, "statusCode"),response1.getStatusCode() );
+        cursor.insertElementWithText(new QName(namespace, "status"), response1.getStatus());
+        cursor.insertElementWithText(new QName(namespace, "statusMessage"), response1.getStatusMessage());
+
+        for (int i = 0; i < response1.subproductos.size(); i++) {
+            SubProducto subproductos = response1.subproductos.get(i);
+
             cursor.beginElement(new QName(namespace, "subproductos"));
-            cursor.insertElementWithText(new QName(namespace, "tipoSubproducto"), "I");
-            cursor.insertElementWithText(new QName(namespace, "fechaCompra"), fechaCompra);
-            cursor.insertElementWithText(new QName(namespace, "moneda"), "DO");
-            cursor.insertElementWithText(new QName(namespace, "montoCompra"), "000000000150");
-            cursor.insertElementWithText(new QName(namespace, "montoCuota"), "000000000076");
-            cursor.insertElementWithText(new QName(namespace, "fechaPago"), "20220816");
-            cursor.insertElementWithText(new QName(namespace, "saldoActual"), "000000000150");
+            cursor.insertElementWithText(new QName(namespace, "tipoSubproducto"), subproductos.getTipoSubProducto());
+            cursor.insertElementWithText(new QName(namespace, "fechaCompra"), subproductos.getFechaCreacion());
+            cursor.insertElementWithText(new QName(namespace, "moneda"), subproductos.getCodigoMoneda());
+            cursor.insertElementWithText(new QName(namespace, "montoCompra"), subproductos.getMontoInicial());
+            cursor.insertElementWithText(new QName(namespace, "montoCuota"), subproductos.getMontoCuotaActual());
+            cursor.insertElementWithText(new QName(namespace, "fechaPago"), subproductos.getFechaFinalizacion());
+            cursor.insertElementWithText(new QName(namespace, "saldoActual"), subproductos.getSaldoActual());
             cursor.toParent();
         }
 

@@ -1,4 +1,4 @@
-package com.siman.credisiman.visa.dto;
+package com.siman.credisiman.visa.dto.subproductos;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,53 +7,44 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConsultaSubproductosResponse {
-    @JsonProperty("code") @JsonAlias("code")
+    @JsonProperty("code")  @JsonAlias("code")
     private String code;
-
     @JsonProperty("message") @JsonAlias("message")
-    private String message;
-
+    public String message;
     @JsonProperty("status") @JsonAlias("status")
-    private String status;
-
+    public String status;
     @JsonProperty("statusCode") @JsonAlias("statusCode")
-    private String statusCode;
-
+    public String statusCode;
     @JsonProperty("statusMessage") @JsonAlias("statusMessage")
-    private String statusMessage;
-
+    public String statusMessage;
     @JsonProperty("tipoMensaje") @JsonAlias("tipoMensaje")
-    private String tipoMensaje;
-
+    public String tipoMensaje;
     @JsonProperty("codigoEmisor") @JsonAlias("codigoEmisor")
-    private String codigoEmisor;
-
+    public String codigoEmisor;
     @JsonProperty("numeroCuenta") @JsonAlias("numeroCuenta")
-    private String numeroCuenta;
-
+    public String numeroCuenta;
     @JsonProperty("numeroTarjeta") @JsonAlias("numeroTarjeta")
-    private String numeroTarjeta;
-
+    public String numeroTarjeta;
     @JsonProperty("usuarioSiscard") @JsonAlias("usuarioSiscard")
-    private String usuarioSiscard;
-
+    public String usuarioSiscard;
     @JsonProperty("saldoDeudorExtrafinanciamientoLocal") @JsonAlias("saldoDeudorExtrafinanciamientoLocal")
-    private String saldoDeudorExtrafinanciamientoLocal;
-
+    public String saldoDeudorExtrafinanciamientoLocal;
     @JsonProperty("saldoDeudorExtrafinanciamientoInter") @JsonAlias("saldoDeudorExtrafinanciamientoInter")
-    private String saldoDeudorExtrafinanciamientoInter;
-
+    public String saldoDeudorExtrafinanciamientoInter;
     @JsonProperty("saldoDeudorIntrafinanciamientoLocal") @JsonAlias("saldoDeudorIntrafinanciamientoLocal")
-    private String saldoDeudorIntrafinanciamientoLocal;
-
+    public String saldoDeudorIntrafinanciamientoLocal;
     @JsonProperty("saldoDeudorIntrafinanciamientoInter") @JsonAlias("saldoDeudorIntrafinanciamientoInter")
-    private String saldoDeudorIntrafinanciamientoInter;
-
+    public String saldoDeudorIntrafinanciamientoInter;
     @JsonProperty("saldoDisponible") @JsonAlias("saldoDisponible")
-    private String saldoDisponible;
+    public String saldoDisponible;
+    @JsonProperty("subproductos") @JsonAlias("subproductos")
+    public List<SubProducto> subproductos;
+
 }

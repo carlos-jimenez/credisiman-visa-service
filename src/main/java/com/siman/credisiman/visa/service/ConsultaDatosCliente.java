@@ -23,7 +23,6 @@ public class ConsultaDatosCliente {
         String namespace = "http://siman.com/ConsultaDatosCliente";
         String operationResponse = "ObtenerDatosClienteResponse";
         ConsultaDatosClienteResponse response1 = new ConsultaDatosClienteResponse();
-        String url = remoteJndiSunnel;
         //OBTENER DATOS TARJETA CREDISIMAN
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
@@ -52,8 +51,8 @@ public class ConsultaDatosCliente {
         }
 
         //datos tarjeta privada
-        ConsultaDatosClienteResponse response2 = tarjetaPrivada("022504664", url);
-
+        ConsultaDatosClienteResponse response2 = tarjetaPrivada("022504664", remoteJndiSunnel);
+        log.info(response2.getNombre());
 
         XmlObject result = XmlObject.Factory.newInstance();
         XmlCursor cursor = result.newCursor();
@@ -78,7 +77,7 @@ public class ConsultaDatosCliente {
         cursor.insertElementWithText(new QName(namespace, "direccionPatrono"), response1.getDireccionPatrono());
         cursor.toParent();
 
-        log.info("obtenerDatosCliente response = [" + result.toString() + "]");
+        log.info("obtenerDatosCliente response = [" + result + "]");
         return result;
     }
 

@@ -51,8 +51,15 @@ public class ConsultaDatosCliente {
             response1 = new ObjectMapper()
                     .readValue(response.toString(), ConsultaDatosClienteResponse.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            cursor.toNextToken();
+            cursor.beginElement(responseQName);
+            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
+            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
+            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
+            cursor.toParent();
             log.info(e.getMessage());
+            log.info("obtenerDatosCliente response = [" + result + "]");
+            return result;
         }
 
         //datos tarjeta privada
@@ -67,7 +74,7 @@ public class ConsultaDatosCliente {
             cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
             cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
             cursor.toParent();
-
+            log.info(e.getMessage());
             log.info("obtenerDatosCliente response = [" + result + "]");
             return result;
         }

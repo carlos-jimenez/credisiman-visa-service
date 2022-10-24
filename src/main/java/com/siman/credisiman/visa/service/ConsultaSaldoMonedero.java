@@ -47,9 +47,19 @@ public class ConsultaSaldoMonedero {
             response1 = new ObjectMapper()
                     .readValue(response.toString(), ConsultaSaldoMonederoResponse.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            cursor.toNextToken();
+            cursor.beginElement(responseQName);
+            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
+            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
+            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
+            cursor.toParent();
+
+            log.info("ConsultaSaldoMonedero response = [" + result + "]");
             log.info(e.getMessage());
+
+            return result;
         }
+
         cursor.toNextToken();
         cursor.beginElement(responseQName);
         cursor.insertElementWithText(new QName(namespace, "statusCode"), "00");

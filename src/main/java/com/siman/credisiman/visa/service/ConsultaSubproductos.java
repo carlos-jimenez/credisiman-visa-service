@@ -21,7 +21,10 @@ public class ConsultaSubproductos {
         String namespace = "http://siman.com/ConsultaSubproductos";
         String operationResponse = "ObtenerConsultaSubproductosResponse";
         String[] fechasCompra = {"20220716", "20220717", "20220718"};
-        ConsultaSubproductosResponse response1 = new ConsultaSubproductosResponse();
+        ConsultaSubproductosResponse response1 = new ConsultaSubproductosResponse();XmlObject result = XmlObject.Factory.newInstance();
+        XmlCursor cursor = result.newCursor();
+        QName responseQName = new QName(namespace, operationResponse);
+
         //OBTENER DATOS TARJETA CREDISIMAN
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
@@ -46,16 +49,20 @@ public class ConsultaSubproductos {
                     .readValue(response.toString(), ConsultaSubproductosResponse.class);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            cursor.toNextToken();
+            cursor.beginElement(responseQName);
+            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
+            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
+            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
+            cursor.toParent();
+
+            log.info("ConsultaSubproductos response = [" + result + "]");
             log.info(e.getMessage());
         }
 
-        XmlObject result = XmlObject.Factory.newInstance();
-        XmlCursor cursor = result.newCursor();
-        QName responseQName = new QName(namespace, operationResponse);
+
         cursor.toNextToken();
         cursor.beginElement(responseQName);
-
         cursor.insertElementWithText(new QName(namespace, "statusCode"),response1.getStatusCode() );
         cursor.insertElementWithText(new QName(namespace, "status"), response1.getStatus());
         cursor.insertElementWithText(new QName(namespace, "statusMessage"), response1.getStatusMessage());

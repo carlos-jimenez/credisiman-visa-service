@@ -22,6 +22,10 @@ public class SolicitudReposicionTarjeta {
         String namespace = "http://siman.com/SolicitudReposicionTarjeta";
         String operationResponse = "ObtenerSolicitudReposicionTarjetaResponse";
         SolicitudReposicionTarjetaResponse response1 = new SolicitudReposicionTarjetaResponse();
+        XmlObject result = XmlObject.Factory.newInstance();
+        XmlCursor cursor = result.newCursor();
+        QName responseQName = new QName(namespace, operationResponse);
+
         //OBTENER DATOS
 
         try {
@@ -49,14 +53,21 @@ public class SolicitudReposicionTarjeta {
             response1 = new ObjectMapper()
                     .readValue(response.toString(), SolicitudReposicionTarjetaResponse.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            cursor.toNextToken();
+            cursor.beginElement(responseQName);
+            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
+            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
+            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
+            cursor.toParent();
+
+            log.info("SolicitudReposicionTarjeta response = [" + result + "]");
             log.info(e.getMessage());
+
+            return result;
         }
 
 
-        XmlObject result = XmlObject.Factory.newInstance();
-        XmlCursor cursor = result.newCursor();
-        QName responseQName = new QName(namespace, operationResponse);
+
         cursor.toNextToken();
         cursor.beginElement(responseQName);
         cursor.insertElementWithText(new QName(namespace, "statusCode"), response1.getStatusCode());

@@ -14,116 +14,117 @@ import lombok.NoArgsConstructor;
 public class ConsultaDatosClienteResponse {
 
     @JsonProperty("statusCode") @JsonAlias("statusCode")
-    public String statusCode;
+    private String statusCode;
 
     @JsonProperty("status") @JsonAlias("status")
-    public String status;
+    private String status;
 
     @JsonProperty("statusMessage") @JsonAlias("statusMessage")
-    public String statusMessage;
+    private String statusMessage;
 
     @JsonProperty("nombre")  @JsonAlias("nombre")
-    public String nombre;
+    private String nombre;
 
     @JsonProperty("segundoNombre")  @JsonAlias("segundoNombre")
-    public String segundoNombre;
+    private String segundoNombre;
 
     @JsonProperty("primerApellido")  @JsonAlias("primerApellido")
-    public String primerApellido;
+    private String primerApellido;
 
     @JsonProperty("segundoApellido") @JsonAlias("segundoApellido")
-    public String segundoApellido;
+    private String segundoApellido;
 
     @JsonProperty("apellidoCasada")  @JsonAlias("apellidoCasada")
-    public String apellidoCasada;
+    private String apellidoCasada;
 
     @JsonProperty("tipoIdentificacion")  @JsonAlias("tipoIdentificacion")
-    public String tipoIdentificacion;
+    private String tipoIdentificacion;
 
     @JsonProperty("identificacion") @JsonAlias("identificacion")
-    public String identificacion;
+    private String identificacion;
 
     @JsonProperty("correoElectronico") @JsonAlias("correoElectronico")
-    public String correoElectronico;
+    private String correoElectronico;
 
     @JsonProperty("celular")  @JsonAlias("celular")
-    public String celular;
+    private String celular;
 
     @JsonProperty("direccion")  @JsonAlias("direccion")
-    public String direccion;
+    private String direccion;
 
     @JsonProperty("direccionPatrono") @JsonAlias("direccionPatrono")
-    public String direccionPatrono;
+    private String direccionPatrono;
 
     //others
-    public String code;
-    public String message;
-    public String tipoMensaje;
-    public String tipoPersoneria;
-    public String nacimiento;
-    public String estadoCivil;
-    public String sexo;
-    public String codigoNacionalidad;
-    public String telefono1;
-    public String direccion2;
-    public String direccion3;
-    public String ciudad;
-    public String estado;
-    public String codigoPostal;
-    public String apartado;
-    public String codigoRegion;
-    public String codigoZona;
-    public String codigoSector;
-    public String codigoProfesion;
-    public String claseEnte;
-    public String telefonoCelular;
-    public String filler4;
-    public String numeroCliente;
-    public String vivienda;
-    public String parienteCercano;
-    public String parentesco;
-    public String telefonoPariente;
-    public String direccionPariente;
-    public String ciudadPariente;
-    public String codigoPostalPariente;
-    public String apartadoPariente;
-    public String nombrePatrono;
-    public String codigoAreaPatrono;
-    public String codigoActividadPatrono;
-    public String telefonoPatrono;
-    public String ciudadPatrono;
-    public String estadoPatrono;
-    public String codigoPostalPatron;
-    public String apartadoPatrono;
-    public String fechaIngresoTrabajo;
-    public String puestoActual;
-    public String sueldoActual;
-    public String origenFondosPatrono;
-    public String promedioIngresoPatrono;
-    public String promedioEgresoPatrono;
-    public String rangoSueldo;
-    public String registroMercantil;
-    public String fechaInicioEmpresa;
-    public String representanteLegal;
-    public String identidadRepLegal;
-    public String correoElectronicoAdicional;
-    public String envioEstado;
-    public String numeroNIT;
-    public String lugarEmisionNIT;
-    public String categoriaCliente;
-    public String tomo;
-    public String folio;
-    public String asiento;
-    public String codigoArea;
-    public String codigoActividad;
-    public String codigoVendedor;
-    public String origenFondos;
-    public String promedioIngreso;
-    public String promedioEgreso;
-    public String nombreComercialEmp;
-    public String tipoEntidad;
-    public String fechaCreacion;
-    public String lugarCreacion;
-    public String representanteLegalAnterior;
-    public String representanteLegalActual;
+    private String code;
+    private String message;
+    private String tipoMensaje;
+    private String tipoPersoneria;
+    private String nacimiento;
+    private String estadoCivil;
+    private String sexo;
+    private String codigoNacionalidad;
+    private String telefono1;
+    private String direccion2;
+    private String direccion3;
+    private String ciudad;
+    private String estado;
+    private String codigoPostal;
+    private String apartado;
+    private String codigoRegion;
+    private String codigoZona;
+    private String codigoSector;
+    private String codigoProfesion;
+    private String claseEnte;
+    private String telefonoCelular;
+    private String filler4;
+    private String numeroCliente;
+    private String vivienda;
+    private String parienteCercano;
+    private String parentesco;
+    private String telefonoPariente;
+    private String direccionPariente;
+    private String ciudadPariente;
+    private String codigoPostalPariente;
+    private String apartadoPariente;
+    private String nombrePatrono;
+    private String codigoAreaPatrono;
+    private String codigoActividadPatrono;
+    private String telefonoPatrono;
+    private String ciudadPatrono;
+    private String estadoPatrono;
+    private String codigoPostalPatron;
+    private String apartadoPatrono;
+    private String fechaIngresoTrabajo;
+    private String puestoActual;
+    private String sueldoActual;
+    private String origenFondosPatrono;
+    private String promedioIngresoPatrono;
+    private String promedioEgresoPatrono;
+    private String rangoSueldo;
+    private String registroMercantil;
+    private String fechaInicioEmpresa;
+    private String representanteLegal;
+    private String identidadRepLegal;
+    private String correoElectronicoAdicional;
+    private String envioEstado;
+    private String numeroNIT;
+    private String lugarEmisionNIT;
+    private String categoriaCliente;
+    private String tomo;
+    private String folio;
+    private String asiento;
+    private String codigoArea;
+    private String codigoActividad;
+    private String codigoVendedor;
+    private String origenFondos;
+    private String promedioIngreso;
+    private String promedioEgreso;
+    private String nombreComercialEmp;
+    private String tipoEntidad;
+    private String fechaCreacion;
+    private String lugarCreacion;
+    private String representanteLegalAnterior;
+    private String representanteLegalActual;
+
 }

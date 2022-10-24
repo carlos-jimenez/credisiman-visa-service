@@ -17,12 +17,17 @@ import java.sql.*;
 
 public class ConsultaDatosCliente {
     private static final Logger log = LoggerFactory.getLogger(ConsultaDatosCliente.class);
+    private static final String namespace = "http://siman.com/ConsultaDatosCliente";
+    private static final String operationResponse = "ObtenerDatosClienteResponse";
 
     public static XmlObject obtenerDatosCliente(String pais, String identificacion, String remoteJndiSunnel,
                                                 String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
-        String namespace = "http://siman.com/ConsultaDatosCliente";
-        String operationResponse = "ObtenerDatosClienteResponse";
+
         ConsultaDatosClienteResponse response1 = new ConsultaDatosClienteResponse();
+        XmlObject result = XmlObject.Factory.newInstance();
+        XmlCursor cursor = result.newCursor();
+        QName responseQName = new QName(namespace, operationResponse);
+
         //OBTENER DATOS TARJETA CREDISIMAN
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
@@ -51,12 +56,22 @@ public class ConsultaDatosCliente {
         }
 
         //datos tarjeta privada
-        ConsultaDatosClienteResponse response2 = tarjetaPrivada("022504664", remoteJndiSunnel);
-        log.info(response2.getNombre());
+        ConsultaDatosClienteResponse response2 = null;
+        try {
+            response2 = tarjetaPrivada("022504664", remoteJndiSunnel);
+            log.info(response2.getNombre());
+        } catch (Exception e) {
+            cursor.toNextToken();
+            cursor.beginElement(responseQName);
+            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
+            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
+            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
+            cursor.toParent();
 
-        XmlObject result = XmlObject.Factory.newInstance();
-        XmlCursor cursor = result.newCursor();
-        QName responseQName = new QName(namespace, operationResponse);
+            log.info("obtenerDatosCliente response = [" + result + "]");
+            return result;
+        }
+
         cursor.toNextToken();
         cursor.beginElement(responseQName);
         cursor.insertElementWithText(new QName(namespace, "statusCode"), response1.getStatusCode());
@@ -82,7 +97,7 @@ public class ConsultaDatosCliente {
     }
 
     //OBTENER DATOS TARJETA PRIVADA
-    public static ConsultaDatosClienteResponse tarjetaPrivada(String identifier, String remoteJndiSunnel) {
+    public static ConsultaDatosClienteResponse tarjetaPrivada(String identifier, String remoteJndiSunnel) throws  Exception {
         String QUERY =
                 "SELECT c.customerid AS niu," + "substr(pc.firstname, 1, instr(pc.firstname, " + "' '" + ") - 1) as primerNombre,"
                         + "substr(pc.firstname, instr(pc.firstname, " + "' '" + ") + 1)    as segundoNombre, " +
@@ -98,31 +113,28 @@ public class ConsultaDatosCliente {
                         "INNER JOIN sunnel.t_gpersoncustomer pc ON pc.customerid = c.customerid " +
                         "WHERE c.identificationnumber = ? ";
         ConsultaDatosClienteResponse response1 = new ConsultaDatosClienteResponse();
-        try {//instancia de conexion
-            Connection conexion = new ConnectionHandler().getConnection(remoteJndiSunnel);
-            PreparedStatement sentencia = conexion.prepareStatement(QUERY);
-            sentencia.setString(1, identifier);
-            ResultSet rs = sentencia.executeQuery();
+        //instancia de conexion
+        Connection conexion = new ConnectionHandler().getConnection(remoteJndiSunnel);
+        PreparedStatement sentencia = conexion.prepareStatement(QUERY);
+        sentencia.setString(1, identifier);
+        ResultSet rs = sentencia.executeQuery();
 
-            while (rs.next()) {
-                //Display values
-                response1.setNombre(rs.getString("primerNombre"));
-                response1.setSegundoNombre(rs.getString("segundoNombre"));
-                response1.setPrimerApellido(rs.getString("primerApellido"));
-                response1.setSegundoApellido(rs.getString("segundoApellido"));
-                response1.setApellidoCasada(rs.getString("apellidoCasada"));
-                response1.setNacimiento(rs.getString("fechaNacimiento"));
-                response1.setTipoIdentificacion(rs.getString("tipoIdentificacion"));
-                response1.setIdentificacion(rs.getString("numeroIdentificacion"));
-                response1.setCorreoElectronico(rs.getString("correo"));
-                response1.setCelular(rs.getString("celular"));
-                response1.setDireccion(rs.getString("direccion"));
-                response1.setNombrePatrono(rs.getString("direccionTrabajo"));
-                response1.setDireccionPatrono(rs.getString("lugarTrabajo"));
-            }
-            return response1;
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
+        while (rs.next()) {
+            //Display values
+            response1.setNombre(rs.getString("primerNombre"));
+            response1.setSegundoNombre(rs.getString("segundoNombre"));
+            response1.setPrimerApellido(rs.getString("primerApellido"));
+            response1.setSegundoApellido(rs.getString("segundoApellido"));
+            response1.setApellidoCasada(rs.getString("apellidoCasada"));
+            response1.setNacimiento(rs.getString("fechaNacimiento"));
+            response1.setTipoIdentificacion(rs.getString("tipoIdentificacion"));
+            response1.setIdentificacion(rs.getString("numeroIdentificacion"));
+            response1.setCorreoElectronico(rs.getString("correo"));
+            response1.setCelular(rs.getString("celular"));
+            response1.setDireccion(rs.getString("direccion"));
+            response1.setNombrePatrono(rs.getString("direccionTrabajo"));
+            response1.setDireccionPatrono(rs.getString("lugarTrabajo"));
         }
+        return response1;
     }
 }

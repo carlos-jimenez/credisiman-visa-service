@@ -16,7 +16,12 @@
 		<repository>
 			<id>siman-dependencies</id>
 			<name>Repositorio de las dependencias de siman</name>
-			<url>http://jira-dev.siman.com:8383/nexus/content/repositories/siman-dep-repo/</url>
+			<url>http://jira-dev.siman.co:8383/nexus/content/repositories/siman-dep-repo/</url>
+		</repository>
+		<repository>
+			<id>public-apache-repo</id>
+			<name>Apache Repo</name>
+			<url>https://repo.maven.apache.org/maven2/</url>
 		</repository>
 		<repository>
 			<id>public-apache-repo</id>
@@ -59,6 +64,18 @@
 			<scope>system</scope>
 			<version>1.0-SNAPSHOT</version>
 			<systemPath>${basedir}/src/main/resources/lib/utils-1.0-SNAPSHOT.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.weblogic</groupId>
+			<artifactId>wlclient</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/wlfullclient.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/ojdbc8.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

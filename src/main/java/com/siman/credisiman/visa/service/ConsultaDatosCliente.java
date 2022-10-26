@@ -2,11 +2,13 @@ package com.siman.credisiman.visa.service;
 
 import javax.xml.namespace.QName;
 
+import com.credisiman.visa.soa.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.siman.credisiman.visa.dto.datoscliente.ConsultaDatosClienteResponse;
 import com.siman.credisiman.visa.utils.ConnectionHandler;
+import com.siman.credisiman.visa.utils.Message;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
@@ -17,16 +19,35 @@ import java.sql.*;
 
 public class ConsultaDatosCliente {
     private static final Logger log = LoggerFactory.getLogger(ConsultaDatosCliente.class);
-    private static final String namespace = "http://siman.com/ConsultaDatosCliente";
-    private static final String operationResponse = "ObtenerDatosClienteResponse";
 
     public static XmlObject obtenerDatosCliente(String pais, String identificacion, String remoteJndiSunnel,
                                                 String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
 
+        String namespace = "http://siman.com/ConsultaDatosCliente";
+        String operationResponse = "ObtenerDatosClienteResponse";
         ConsultaDatosClienteResponse response1 = new ConsultaDatosClienteResponse();
         XmlObject result = XmlObject.Factory.newInstance();
         XmlCursor cursor = result.newCursor();
         QName responseQName = new QName(namespace, operationResponse);
+
+        //validar campos requeridos
+        Utils utils = new Utils();
+        Message message = new Message();
+
+        if (!utils.validateNotNull(pais)) {
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (!utils.validateNotNull(identificacion)) {
+            return message.genericMessage("ERROR", "025", "El campo identificación es obligatorio", namespace, operationResponse);
+        }
+
+        //validar longitudes
+        if (!utils.validateLongitude(pais,3)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo pais debe ser menor o igual a 3", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(identificacion,19)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo identificacion debe ser menor o igual a 19", namespace, operationResponse);
+        }
 
         //OBTENER DATOS TARJETA CREDISIMAN
         try {
@@ -51,15 +72,8 @@ public class ConsultaDatosCliente {
             response1 = new ObjectMapper()
                     .readValue(response.toString(), ConsultaDatosClienteResponse.class);
         } catch (Exception e) {
-            cursor.toNextToken();
-            cursor.beginElement(responseQName);
-            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
-            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
-            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
-            cursor.toParent();
             log.info(e.getMessage());
-            log.info("obtenerDatosCliente response = [" + result + "]");
-            return result;
+            return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
 
         //datos tarjeta privada
@@ -68,15 +82,8 @@ public class ConsultaDatosCliente {
             response2 = tarjetaPrivada("022504664", remoteJndiSunnel);
             log.info(response2.getNombre());
         } catch (Exception e) {
-            cursor.toNextToken();
-            cursor.beginElement(responseQName);
-            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
-            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
-            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
-            cursor.toParent();
             log.info(e.getMessage());
-            log.info("obtenerDatosCliente response = [" + result + "]");
-            return result;
+            return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
 
         cursor.toNextToken();
@@ -104,7 +111,7 @@ public class ConsultaDatosCliente {
     }
 
     //OBTENER DATOS TARJETA PRIVADA
-    public static ConsultaDatosClienteResponse tarjetaPrivada(String identifier, String remoteJndiSunnel) throws  Exception {
+    public static ConsultaDatosClienteResponse tarjetaPrivada(String identifier, String remoteJndiSunnel) throws Exception {
         String QUERY =
                 "SELECT c.customerid AS niu," + "substr(pc.firstname, 1, instr(pc.firstname, " + "' '" + ") - 1) as primerNombre,"
                         + "substr(pc.firstname, instr(pc.firstname, " + "' '" + ") + 1)    as segundoNombre, " +

@@ -1,10 +1,12 @@
 package com.siman.credisiman.visa.service;
 
+import com.credisiman.visa.soa.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.siman.credisiman.visa.dto.subproductos.ConsultaSubproductosResponse;
 import com.siman.credisiman.visa.dto.subproductos.SubProducto;
+import com.siman.credisiman.visa.utils.Message;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
@@ -14,17 +16,37 @@ import org.slf4j.LoggerFactory;
 import javax.xml.namespace.QName;
 
 public class ConsultaSubproductos {
-    private static Logger log = LoggerFactory.getLogger(ConsultaSubproductos.class);
+    private static final Logger log = LoggerFactory.getLogger(ConsultaSubproductos.class);
 
     public static XmlObject obtenerConsultaSubproductos(String pais, String numeroTarjeta, String remoteJndiSunnel,
                                                         String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
         String namespace = "http://siman.com/ConsultaSubproductos";
         String operationResponse = "ObtenerConsultaSubproductosResponse";
         String[] fechasCompra = {"20220716", "20220717", "20220718"};
-        ConsultaSubproductosResponse response1 = new ConsultaSubproductosResponse();XmlObject result = XmlObject.Factory.newInstance();
+        ConsultaSubproductosResponse response1 = new ConsultaSubproductosResponse();
+
+        Utils utils = new Utils();
+        Message message = new Message();
+
+        XmlObject result = XmlObject.Factory.newInstance();
         XmlCursor cursor = result.newCursor();
         QName responseQName = new QName(namespace, operationResponse);
 
+        //validar campos requeridos
+        if (!utils.validateNotNull(pais)|| utils.validateNotEmpty(pais)) {
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (!utils.validateNotNull(numeroTarjeta)|| utils.validateNotEmpty(numeroTarjeta)) {
+            return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
+        }
+
+        //validar longitudes
+        if (!utils.validateLongitude(pais,3)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo pais debe ser menor o igual a 3", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(numeroTarjeta  ,16)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo número tarjeta debe ser menor o igual a 16", namespace, operationResponse);
+        }
         //OBTENER DATOS TARJETA CREDISIMAN
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
@@ -49,15 +71,8 @@ public class ConsultaSubproductos {
                     .readValue(response.toString(), ConsultaSubproductosResponse.class);
 
         } catch (Exception e) {
-            cursor.toNextToken();
-            cursor.beginElement(responseQName);
-            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
-            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
-            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
-            cursor.toParent();
-
-            log.info("ConsultaSubproductos response = [" + result + "]");
             log.info(e.getMessage());
+            return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
 
 

@@ -34,10 +34,10 @@ public class ConsultaDatosCliente {
         Utils utils = new Utils();
         Message message = new Message();
 
-        if (!utils.validateNotNull(pais)) {
+        if (!utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
             return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(identificacion)) {
+        if (!utils.validateNotNull(identificacion)|| utils.validateNotEmpty(identificacion)) {
             return message.genericMessage("ERROR", "025", "El campo identificación es obligatorio", namespace, operationResponse);
         }
 

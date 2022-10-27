@@ -1,9 +1,11 @@
 package com.siman.credisiman.visa.service;
 
+import com.credisiman.visa.soa.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.siman.credisiman.visa.dto.consultamonedero.ConsultaSaldoMonederoResponse;
+import com.siman.credisiman.visa.utils.Message;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
@@ -20,11 +22,43 @@ public class ConsultaSaldoMonedero {
 			String binCredisiman) {
         String namespace = "http://siman.com/ConsultaSaldoMonedero";
         String operationResponse = "ObtenerConsultaSaldoMonederoResponse";
-        //OBTENER DATOS
+
         XmlObject result = XmlObject.Factory.newInstance();
         XmlCursor cursor = result.newCursor();
         QName responseQName = new QName(namespace, operationResponse);
         ConsultaSaldoMonederoResponse response1 = new ConsultaSaldoMonederoResponse();
+
+        Utils utils = new Utils();
+        Message message = new Message();
+
+        //validar campos requeridos
+        if (!utils.validateNotNull(pais)|| utils.validateNotEmpty(pais)) {
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (!utils.validateNotNull(numeroTarjeta)|| utils.validateNotEmpty(numeroTarjeta)) {
+            return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
+        }
+        if (!utils.validateNotNull(cuenta)|| utils.validateNotEmpty(cuenta)) {
+            return message.genericMessage("ERROR", "025", "El campo cuenta es obligatorio", namespace, operationResponse);
+        }
+        if (!utils.validateNotNull(fechaCorte)|| utils.validateNotEmpty(fechaCorte)) {
+            return message.genericMessage("ERROR", "025", "El campo fecha corte es obligatorio", namespace, operationResponse);
+        }
+
+        //validar longitudes
+        if (!utils.validateLongitude(pais,3)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo pais debe ser menor o igual a 3", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(numeroTarjeta  ,16)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo número tarjeta debe ser menor o igual a 16", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(cuenta,5)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo cuenta debe ser menor o igual a 5", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(fechaCorte  ,8)) {
+            return message.genericMessage("ERROR", "025", "La longitud del campo número tarjeta debe ser menor o igual a 8", namespace, operationResponse);
+        }
+
         //OBTENER DATOS TARJETA CREDISIMAN
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
@@ -47,17 +81,9 @@ public class ConsultaSaldoMonedero {
             response1 = new ObjectMapper()
                     .readValue(response.toString(), ConsultaSaldoMonederoResponse.class);
         } catch (Exception e) {
-            cursor.toNextToken();
-            cursor.beginElement(responseQName);
-            cursor.insertElementWithText(new QName(namespace, "status"),"ERROR");
-            cursor.insertElementWithText(new QName(namespace, "statusCode"), "600");
-            cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Error general contacte al administrador del sistema...");
-            cursor.toParent();
-
-            log.info("ConsultaSaldoMonedero response = [" + result + "]");
             log.info(e.getMessage());
+            return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
 
-            return result;
         }
 
         cursor.toNextToken();

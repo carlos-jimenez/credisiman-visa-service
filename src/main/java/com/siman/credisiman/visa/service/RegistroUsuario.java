@@ -28,53 +28,65 @@ public class RegistroUsuario {
         Message message = new Message();
 
         //validar campos requeridos
-        if (!utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
+        if (utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
+            log.info("pais required");
             return message.genericMessage("ERROR", "025",
                     "El campo pais es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(primerNombre) || utils.validateNotEmpty(primerNombre)) {
+        if (utils.validateNotNull(primerNombre) || utils.validateNotEmpty(primerNombre)) {
+            log.info("primer nombre required");
             return message.genericMessage("ERROR", "025",
                     "El campo primer nombre es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(primerApellido) || utils.validateNotEmpty(primerApellido)) {
+        if (utils.validateNotNull(primerApellido) || utils.validateNotEmpty(primerApellido)) {
+            log.info("primer apellido required");
             return message.genericMessage("ERROR", "025",
                     "El campo primer apellido es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(paisResidencia) || utils.validateNotEmpty(paisResidencia)) {
+        if (utils.validateNotNull(paisResidencia) || utils.validateNotEmpty(paisResidencia)) {
+            log.info("pais residencia required");
             return message.genericMessage("ERROR", "025",
                     "El campo pais residencia es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(fechaNacimiento) || utils.validateNotEmpty(fechaNacimiento)) {
+        if (utils.validateNotNull(fechaNacimiento) || utils.validateNotEmpty(fechaNacimiento)) {
+            log.info("fecha nacimiento required");
             return message.genericMessage("ERROR", "025",
                     "El campo fecha nacimiento es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(tipoDocumento) || utils.validateNotEmpty(tipoDocumento)) {
+        if (utils.validateNotNull(tipoDocumento) || utils.validateNotEmpty(tipoDocumento)) {
+            log.info("tipo documento required");
             return message.genericMessage("ERROR", "025",
                     "El campo tipo documento es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(numeroDocumento) || utils.validateNotEmpty(numeroDocumento)) {
+        if (utils.validateNotNull(numeroDocumento) || utils.validateNotEmpty(numeroDocumento)) {
+            log.info("numero documento required");
             return message.genericMessage("ERROR", "025",
                     "El campo número documento es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(correo) || utils.validateNotEmpty(correo)) {
+        if (utils.validateNotNull(correo) || utils.validateNotEmpty(correo)) {
+            log.info("correo required");
             return message.genericMessage("ERROR", "025",
                     "El campo correo es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(celular) || utils.validateNotEmpty(celular)) {
+        if (utils.validateNotNull(celular) || utils.validateNotEmpty(celular)) {
+            log.info("celular required");
             return message.genericMessage("ERROR", "025",
                     "El campo celular es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(correoNotificacion) || utils.validateNotEmpty(correoNotificacion)) {
+        if (utils.validateNotNull(correoNotificacion) || utils.validateNotEmpty(correoNotificacion)) {
+            log.info("correo notificacion required");
             return message.genericMessage("ERROR", "025",
                     "El campo correo notificación es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(celularNotificacion) || utils.validateNotEmpty(celularNotificacion)) {
+        if (utils.validateNotNull(celularNotificacion) || utils.validateNotEmpty(celularNotificacion)) {
+            log.info("celular notificacion required");
             return message.genericMessage("ERROR", "025",
                     "El campo celular notificación es obligatorio", namespace, operationResponse);
         }
 
         //validar fecha
         if (!utils.validateDate(fechaNacimiento)) {
+            log.info("validar fecha nacimiento");
             return message.genericMessage("ERROR", "024",
                     "El campo fecha nacimiento no cumple el formato establecido, ej. YYYYMMDD", namespace, operationResponse);
         }

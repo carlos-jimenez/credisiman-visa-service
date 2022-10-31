@@ -33,10 +33,10 @@ public class ConsultaSubproductos {
         QName responseQName = new QName(namespace, operationResponse);
 
         //validar campos requeridos
-        if (!utils.validateNotNull(pais)|| utils.validateNotEmpty(pais)) {
+        if (utils.validateNotNull(pais)|| utils.validateNotEmpty(pais)) {
             return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(numeroTarjeta)|| utils.validateNotEmpty(numeroTarjeta)) {
+        if (utils.validateNotNull(numeroTarjeta)|| utils.validateNotEmpty(numeroTarjeta)) {
             return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
         }
 

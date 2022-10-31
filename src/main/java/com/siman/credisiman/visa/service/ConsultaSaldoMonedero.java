@@ -32,16 +32,16 @@ public class ConsultaSaldoMonedero {
         Message message = new Message();
 
         //validar campos requeridos
-        if (!utils.validateNotNull(pais)|| utils.validateNotEmpty(pais)) {
+        if (utils.validateNotNull(pais)|| utils.validateNotEmpty(pais)) {
             return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(numeroTarjeta)|| utils.validateNotEmpty(numeroTarjeta)) {
+        if (utils.validateNotNull(numeroTarjeta)|| utils.validateNotEmpty(numeroTarjeta)) {
             return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(cuenta)|| utils.validateNotEmpty(cuenta)) {
+        if (utils.validateNotNull(cuenta)|| utils.validateNotEmpty(cuenta)) {
             return message.genericMessage("ERROR", "025", "El campo cuenta es obligatorio", namespace, operationResponse);
         }
-        if (!utils.validateNotNull(fechaCorte)|| utils.validateNotEmpty(fechaCorte)) {
+        if (utils.validateNotNull(fechaCorte)|| utils.validateNotEmpty(fechaCorte)) {
             return message.genericMessage("ERROR", "025", "El campo fecha corte es obligatorio", namespace, operationResponse);
         }
 

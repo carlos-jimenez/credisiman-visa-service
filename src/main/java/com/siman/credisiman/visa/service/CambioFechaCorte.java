@@ -1,5 +1,7 @@
 package com.siman.credisiman.visa.service;
 
+import com.credisiman.visa.soa.utils.Utils;
+import com.siman.credisiman.visa.utils.Message;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.slf4j.Logger;
@@ -16,6 +18,44 @@ public class CambioFechaCorte {
         String operationResponse = "ObtenerCambioFechaCorteResponse";
         //VALIDAR DATOS
 
+        //validar campos requeridos
+        Utils utils = new Utils();
+        Message message = new Message();
+
+        if (utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
+            log.info("pais required");
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(numeroTarjeta) || utils.validateNotEmpty(numeroTarjeta)) {
+            log.info("numero tarjeta required");
+            return message.genericMessage("ERROR", "025", "El campo numero tarjeta es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(cuenta) || utils.validateNotEmpty(cuenta)) {
+            log.info("cuenta required");
+            return message.genericMessage("ERROR", "025", "El campo cuenta es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(diaCorte) || utils.validateNotEmpty(diaCorte)) {
+            log.info("dia corte required");
+            return message.genericMessage("ERROR", "025", "El campo día corte es obligatorio", namespace, operationResponse);
+        }
+
+        //validar longitudes
+        if (!utils.validateLongitude(pais,3)) {
+            log.info("pais, size overload");
+            return message.genericMessage("ERROR", "025", "La longitud del campo pais debe ser menor o igual a 3", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(numeroTarjeta  ,16)) {
+            log.info("longitud numero de tarjeta");
+            return message.genericMessage("ERROR", "774", "La longitud del campo número tarjeta debe ser menor o igual a 16", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(cuenta,5)) {
+            log.info("cuenta, size overload");
+            return message.genericMessage("ERROR", "025", "La longitud del campo cuenta debe ser menor o igual a 5", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(diaCorte,2)) {
+            log.info("dia corte, size overload");
+            return message.genericMessage("ERROR", "025", "La longitud del campo dia corte debe ser menor o igual a 2", namespace, operationResponse);
+        }
 
         //OBTENER DATOS
 

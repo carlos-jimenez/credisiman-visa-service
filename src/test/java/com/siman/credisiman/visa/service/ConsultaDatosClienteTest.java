@@ -7,21 +7,24 @@ import org.apache.xmlbeans.XmlObject;
 import org.junit.Test;
 
 public class ConsultaDatosClienteTest {
-	static private String NS = "http://siman.com/ConsultaDatosCliente";
+    static private String NS = "http://siman.com/ConsultaDatosCliente";
 
     @Test
     public void obtenerDatosClienteOk() {
-        XmlObject result = ConsultaDatosCliente.obtenerDatosCliente("SV", "333214569", "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "CDS00867", "600831, 600831, 600831");
-        
+        XmlObject result = ConsultaDatosCliente.obtenerDatosCliente("SV", "048382810", "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "CDS00867", "600831, 600831, 600831");
+
         //Status
-        assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
-        assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
-        
-        //Data
-//        assertEquals("Juan", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:primerNombre")[0]).getStringValue());
-//        assertEquals("José", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:segundoNombre")[0]).getStringValue());
-//        assertEquals("19810423", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:fechaNacimiento")[0]).getStringValue());
-//        assertEquals("012345678", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:tipoIdentificacion")[0]).getStringValue());
-//        assertEquals("77770000", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:celular")[0]).getStringValue());
+        assertEquals("00", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
+        assertEquals("SUCCESS", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
     }
+
+    @Test
+    public void obtenerDatosClienteEvertecOk() {
+        XmlObject result = ConsultaDatosCliente.obtenerDatosCliente("SV", "004653253", "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "CDS00867", "600831, 600831, 600831");
+
+        //Status
+        assertEquals("00", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
+        assertEquals("SUCCESS", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
+    }
+
 }

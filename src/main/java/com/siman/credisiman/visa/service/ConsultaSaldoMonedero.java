@@ -63,7 +63,7 @@ public class ConsultaSaldoMonedero {
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
             jsonSend.put("country", pais)
-                    .put("processIdentifier", "ConsultaDatosEnte")
+                    .put("processIdentifier", "ConsultaPremiacion")
                     .put("fechaCorte", fechaCorte)
                     .put("numeroCuenta", cuenta)
                     .put("codigoEmisor", "45738400");

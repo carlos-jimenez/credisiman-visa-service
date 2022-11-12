@@ -19,7 +19,7 @@ public class ConsultaSubproductos {
     private static final Logger log = LoggerFactory.getLogger(ConsultaSubproductos.class);
 
     public static XmlObject obtenerConsultaSubproductos(String pais, String numeroTarjeta, String remoteJndiSunnel,
-                                                        String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
+                                                        String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/ConsultaSubproductos";
         String operationResponse = "ObtenerConsultaSubproductosResponse";
         String[] fechasCompra = {"20220716", "20220717", "20220718"};

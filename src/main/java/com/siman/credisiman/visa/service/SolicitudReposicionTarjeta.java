@@ -19,7 +19,7 @@ public class SolicitudReposicionTarjeta {
 
 	public static XmlObject crearSolicitudReposicionTarjeta(String pais, String numeroTarjeta, String nombreEmbozar,
 			String razonReposicion, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl,
-			String siscardUser, String binCredisiman) {
+			String siscardUser, String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/SolicitudReposicionTarjeta";
         String operationResponse = "ObtenerSolicitudReposicionTarjetaResponse";
         SolicitudReposicionTarjetaResponse response1 = new SolicitudReposicionTarjetaResponse();

@@ -14,7 +14,8 @@ public class ReposicionTarjeta {
 
     public static XmlObject obtenerReposicionTarjeta(String pais, String numeroTarjeta, String nombreEmbozador, String razonReposicion,
                                                      String localidadTramite, String localidadRetiro, String remoteJndiSunnel,
-                                                     String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
+                                                     String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman,
+                                                     String tipoTarjeta) {
         String namespace = "http://siman.com/ReposicionTarjeta";
         String operationResponse = "ObtenerReposicionTarjetaResponse";
         //VALIDAR DATOS

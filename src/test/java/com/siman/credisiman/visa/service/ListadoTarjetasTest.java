@@ -7,7 +7,7 @@ import org.apache.xmlbeans.XmlObject;
 import org.junit.Test;
 
 public class ListadoTarjetasTest {
-	static private String NS = "http://siman.com/ListadoTarjetas";
+	static private final String NS = "http://siman.com/ListadoTarjetas";
 	static String[] listadoTarjetas = {"4000123456780002", "4000123456780001", "4000123456780000"};
 	
     @Test

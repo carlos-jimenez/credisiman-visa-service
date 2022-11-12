@@ -24,7 +24,7 @@ public class ConsultaPolizas {
     private static Logger log = LoggerFactory.getLogger(ConsultaPolizas.class);
 
 	public static XmlObject obtenerConsultaPolizas(String pais, String numeroTarjeta, String remoteJndiSunnel,
-			String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
+			String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/ConsultaPolizas";
         String operationResponse = "ObtenerConsultaPolizasResponse";
         

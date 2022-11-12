@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ConsultaMovimientosTest {
-    static private String NS = "http://siman.com/ConsultaMovimientos";
+    static private final String NS = "http://siman.com/ConsultaMovimientos";
     static String[] ListadoNumeroAutorizacion  = {  "123456703","123456702","123456701"};
 
     @Test
@@ -15,7 +15,8 @@ public class ConsultaMovimientosTest {
 
         XmlObject result = ConsultaMovimientos.obtenerConsultaMovimientos("SLV",
                 "4000123456780000", "20220701", "20220731",
-                "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
+                "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion",
+                "usuario", "600831, 600831, 600831","V");
         int i = 0;
 
         //Status

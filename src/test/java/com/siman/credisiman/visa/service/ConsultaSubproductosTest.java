@@ -12,7 +12,7 @@ public class ConsultaSubproductosTest {
 
     @Test
     public void obtenerConsultaSubProductosOk() {
-        XmlObject result = ConsultaSubproductos.obtenerConsultaSubproductos("SV", "4573840079870646", "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
+        XmlObject result = ConsultaSubproductos.obtenerConsultaSubproductos("SV", "4573840079870646", "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","V");
 //        int i = 0;
 
         //Status

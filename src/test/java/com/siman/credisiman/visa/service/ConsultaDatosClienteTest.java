@@ -7,7 +7,7 @@ import org.apache.xmlbeans.XmlObject;
 import org.junit.Test;
 
 public class ConsultaDatosClienteTest {
-    static private String NS = "http://siman.com/ConsultaDatosCliente";
+    static private final String NS = "http://siman.com/ConsultaDatosCliente";
 
     @Test
     public void obtenerDatosClienteOk() {

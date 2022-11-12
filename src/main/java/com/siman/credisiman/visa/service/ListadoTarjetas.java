@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.siman.credisiman.visa.dto.ConsultaDatosClienteResponse;
 import com.siman.credisiman.visa.dto.ListadoTarjetasResponse;
 import com.siman.credisiman.visa.utils.ConnectionHandler;
 

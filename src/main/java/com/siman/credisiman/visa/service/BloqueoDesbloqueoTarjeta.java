@@ -19,7 +19,7 @@ public class BloqueoDesbloqueoTarjeta {
 
 	public static XmlObject obtenerBloqueoDesbloqueoTarjeta(String pais, String numeroTarjeta, String estadoDeseado,
 			String motivo, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
-			String binCredisiman) {
+			String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/BloqueoDesbloqueoTarjeta";
         String operationResponse = "ObtenerBloqueoDesbloqueoTarjetaResponse";
         

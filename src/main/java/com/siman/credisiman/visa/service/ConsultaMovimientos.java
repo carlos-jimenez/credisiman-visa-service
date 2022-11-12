@@ -25,7 +25,7 @@ public class ConsultaMovimientos {
 
 	public static XmlObject obtenerConsultaMovimientos(String pais, String numeroTarjeta, String fechaInicial,
 			String fechaFinal, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
-			String binCredisiman) {
+			String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/ConsultaMovimientos";
         String operationResponse = "ObtenerConsultaMovimientosResponse";
       

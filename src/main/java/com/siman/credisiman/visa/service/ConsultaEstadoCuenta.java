@@ -12,7 +12,7 @@ public class ConsultaEstadoCuenta {
 
 	public static XmlObject obtenerConsultaEstadoCuenta(String pais, String numeroTarjeta, String cuenta,
 			String fechaCorte, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
-			String binCredisiman) {
+			String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/ConsultaEstadoCuenta";
         String operationResponse = "ObtenerConsultaEstadoCuentaResponse";
         //OBTENER DATOS

@@ -7,11 +7,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class SolicitudReposicionTarjetaTest {
-    static private String NS = "http://siman.com/SolicitudReposicionTarjeta";
+    static private final String NS = "http://siman.com/SolicitudReposicionTarjeta";
 
     @Test
     public void obtenerConsultaSubProductosOk() {
-        XmlObject result = SolicitudReposicionTarjeta.crearSolicitudReposicionTarjeta("SV", "4573840161497142","CindySolisFernandez","1", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
+        XmlObject result = SolicitudReposicionTarjeta.crearSolicitudReposicionTarjeta("SV", "4573840161497142","CindySolisFernandez","1", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831", "P");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());

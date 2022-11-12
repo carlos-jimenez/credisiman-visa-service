@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RegistroUsuario {
-    private static Logger log = LoggerFactory.getLogger(RegistroUsuario.class);
+    private static final Logger log = LoggerFactory.getLogger(RegistroUsuario.class);
 
     public static XmlObject registroUsuario(String pais, String primerNombre, String segundoNombre,
                                             String primerApellido, String segundoApellido, String apellidoCasada, String paisResidencia,

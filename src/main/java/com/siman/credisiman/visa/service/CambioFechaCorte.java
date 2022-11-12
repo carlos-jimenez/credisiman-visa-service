@@ -13,7 +13,8 @@ public class CambioFechaCorte {
     private static Logger log = LoggerFactory.getLogger(CambioFechaCorte.class);
 
     public static XmlObject obtenerCambioFechaCorte(String pais, String numeroTarjeta, String cuenta, String diaCorte,
-                                                     String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
+                                                     String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl,
+                                                    String siscardUser, String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/CambioFechaCorte";
         String operationResponse = "ObtenerCambioFechaCorteResponse";
         //VALIDAR DATOS

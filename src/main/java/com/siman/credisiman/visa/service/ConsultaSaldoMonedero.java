@@ -19,7 +19,7 @@ public class ConsultaSaldoMonedero {
 
 	public static XmlObject obtenerConsultaSaldoMonedero(String pais, String numeroTarjeta, String cuenta,
 			String fechaCorte, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
-			String binCredisiman) {
+			String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/ConsultaSaldoMonedero";
         String operationResponse = "ObtenerConsultaSaldoMonederoResponse";
 

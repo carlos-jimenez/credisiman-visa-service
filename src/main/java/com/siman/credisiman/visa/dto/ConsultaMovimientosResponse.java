@@ -15,6 +15,12 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConsultaMovimientosResponse {
 
+	@JsonProperty("code") @JsonAlias("code")
+	public String code;
+
+	@JsonProperty("message") @JsonAlias("message")
+	public String message;
+
 	@JsonProperty("statusCode") @JsonAlias("statusCode")
     public String statusCode;
 
@@ -27,35 +33,4 @@ public class ConsultaMovimientosResponse {
     @JsonProperty("movimientos") @JsonAlias("movimientos")
     public List<MovimientosResponse> movimientos;
 
-    public String getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getStatusMessage() {
-		return statusMessage;
-	}
-
-	public void setStatusMessage(String statusMessage) {
-		this.statusMessage = statusMessage;
-	}
-
-	public List<MovimientosResponse> getMovimientos() {
-		return movimientos;
-	}
-
-	public void setMovimientos(List<MovimientosResponse> movimientos) {
-		this.movimientos = movimientos;
-	}
 }

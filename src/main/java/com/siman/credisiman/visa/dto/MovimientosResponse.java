@@ -13,82 +13,57 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MovimientosResponse {
 
-	@JsonProperty("tipoMovimiento") @JsonAlias("tipoMovimiento")
-    public String tipoMovimiento;
-	
-	@JsonProperty("fechaMovimiento") @JsonAlias("fechaMovimiento")
-	    public String fechaMovimiento;
-	
-	@JsonProperty("fechaAplicacion") @JsonAlias("fechaAplicacion")
-	    public String fechaAplicacion;
-	
-	@JsonProperty("moneda") @JsonAlias("moneda")
-	    public String moneda;
-	
-	@JsonProperty("monto") @JsonAlias("monto")
-	    public String monto;
-	
-	@JsonProperty("numeroAutorizacion") @JsonAlias("numeroAutorizacion")
-	    public String numeroAutorizacion;
-	
-	@JsonProperty("comercio") @JsonAlias("comercio")
-	    public String comercio;
+    @JsonProperty("tipoMovimiento")
+    @JsonAlias("tipoMovimiento")
+    private String tipoMovimiento;
 
-	public String getTipoMovimiento() {
-		return tipoMovimiento;
-	}
+    @JsonProperty("fechaMovimiento")
+    @JsonAlias("fechaMovimiento")
+    private String fechaMovimiento;
 
-	public void setTipoMovimiento(String tipoMovimiento) {
-		this.tipoMovimiento = tipoMovimiento;
-	}
+    @JsonProperty("fechaConsumo")
+    @JsonAlias("fechaConsumo")
+    private String fechaConsumo;
 
-	public String getFechaMovimiento() {
-		return fechaMovimiento;
-	}
+    @JsonProperty("codigoMoneda")
+    @JsonAlias("codigoMoneda")
+    private String codigoMoneda;
 
-	public void setFechaMovimiento(String fechaMovimiento) {
-		this.fechaMovimiento = fechaMovimiento;
-	}
+    @JsonProperty("monto")
+    @JsonAlias("monto")
+    private String monto;
 
-	public String getFechaAplicacion() {
-		return fechaAplicacion;
-	}
+    @JsonProperty("numeroAutorizacion")
+    @JsonAlias("numeroAutorizacion")
+    private String numeroAutorizacion;
 
-	public void setFechaAplicacion(String fechaAplicacion) {
-		this.fechaAplicacion = fechaAplicacion;
-	}
+    @JsonProperty("descripcionComercio")
+    @JsonAlias("descripcionComercio")
+    private String descripcionComercio;
 
-	public String getMoneda() {
-		return moneda;
-	}
+    //others
 
-	public void setMoneda(String moneda) {
-		this.moneda = moneda;
-	}
+    @JsonProperty("numeroDocumento1")
+    @JsonAlias("numeroDocumento1")
+    private String numeroDocumento1;
 
-	public String getMonto() {
-		return monto;
-	}
+    @JsonProperty("tipo")
+    @JsonAlias("tipo")
+    private String tipo;
 
-	public void setMonto(String monto) {
-		this.monto = monto;
-	}
+    @JsonProperty("numeroTarjeta")
+    @JsonAlias("numeroTarjeta")
+    private String numeroTarjeta;
 
-	public String getNumeroAutorizacion() {
-		return numeroAutorizacion;
-	}
+    @JsonProperty("codigoMCC")
+    @JsonAlias("codigoMCC")
+    private String codigoMCC;
 
-	public void setNumeroAutorizacion(String numeroAutorizacion) {
-		this.numeroAutorizacion = numeroAutorizacion;
-	}
+    @JsonProperty("descripcionMCC")
+    @JsonAlias("descripcionMCC")
+    private String descripcionMCC;
 
-	public String getComercio() {
-		return comercio;
-	}
-
-	public void setComercio(String comercio) {
-		this.comercio = comercio;
-	}
-
-
+    @JsonProperty("categoriaMCC")
+    @JsonAlias("categoriaMCC")
+    private String categoriaMCC;
 }

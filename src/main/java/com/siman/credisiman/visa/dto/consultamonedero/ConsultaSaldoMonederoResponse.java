@@ -30,4 +30,7 @@ public class ConsultaSaldoMonederoResponse {
     public String puntosCanjeados;
     @JsonProperty("saldoFinal") @JsonAlias("saldoFinal")
     public String saldoFinal;
+
+    @JsonProperty("respuestas") @JsonAlias("respuestas")
+    private Object respuestas;
 }

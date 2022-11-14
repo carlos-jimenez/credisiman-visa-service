@@ -43,8 +43,8 @@ public class ConsultaPolizas {
                     if (response1.getListaDePolizas().size()>0  &&response1 != null) {
                         return estructura(response1);
                     } else {
-                        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
-                        return message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse);
+                        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
+                        return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
                     }
                 case "V":
                     //datos tarjeta visa
@@ -52,8 +52,8 @@ public class ConsultaPolizas {
                     if (response2.getListaDePolizas().size() > 0) {
                         return estructura(response2);
                     } else {
-                        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse) + "]");
-                        return message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse);
+                        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
+                        return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
                     }
             }
         } catch (SQLException e) {
@@ -66,8 +66,8 @@ public class ConsultaPolizas {
             log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
-        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
-        return message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse);
+        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
+        return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
 
     }
 

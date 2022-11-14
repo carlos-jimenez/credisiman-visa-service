@@ -65,8 +65,8 @@ public class ConsultaDatosCliente {
                 log.info("DATOS TARJETA CREDISIMAN");
                 return estructura(response3);
             } else {
-                log.info("obtenerDatosCliente response = [" +message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse)+ "]");
-                return message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse);
+                log.info("obtenerDatosCliente response = [" +message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse)+ "]");
+                return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
             }
 
         } catch (SQLException e) {

@@ -40,7 +40,7 @@ public class ConsultaPolizas {
                 case "P":
                     //datos tarjeta privada
                     response1 = obtenerDatosArca(remoteJndiSunnel, numeroTarjeta);
-                    if (response1 != null) {
+                    if (response1.getListaDePolizas().size()>0) {
                         return estructura(response1);
                     } else {
                         log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
@@ -91,6 +91,7 @@ public class ConsultaPolizas {
         }
 
         cursor.toParent();
+        log.info("ObtenerConsultaPolizas response = [" + result + "]");
         return result;
     }
 

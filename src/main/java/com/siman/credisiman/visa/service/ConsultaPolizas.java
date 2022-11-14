@@ -40,7 +40,7 @@ public class ConsultaPolizas {
                 case "P":
                     //datos tarjeta privada
                     response1 = obtenerDatosArca(remoteJndiSunnel, numeroTarjeta);
-                    if (response1.getListaDePolizas().size()>0) {
+                    if (response1.getListaDePolizas().size()>0  &&response1 != null) {
                         return estructura(response1);
                     } else {
                         log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
@@ -52,7 +52,7 @@ public class ConsultaPolizas {
                     if (response2.getListaDePolizas().size() > 0) {
                         return estructura(response2);
                     } else {
-                        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
+                        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse) + "]");
                         return message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse);
                     }
             }
@@ -61,6 +61,7 @@ public class ConsultaPolizas {
             log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         } catch (Exception ex) {
+            ex.printStackTrace();
             log.error("SERVICE ERROR, " + ex.getMessage());
             log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
@@ -96,13 +97,12 @@ public class ConsultaPolizas {
     }
 
     public static ConsultaPolizasResponse obtenerDatosArca(String remoteJndiSunnel, String numeroTarjeta) throws Exception {
-        String query = "SELECT A.CARDID, "
-                + "       AT.AUTOMATEDCHARGETYPEID tipoPoliza, "
-                + "       AT.DESCRIPTION nombrePoliza, "
-                + "       A.STATUS estadoPoliza  "
-                + "  FROM SUNNEL.T_GAUTOMATEDCHARGE a, SUNNEL.T_GAUTOMATEDCHARGETYPE at "
-                + " WHERE A.AUTOMATEDCHARGETYPEID = AT.AUTOMATEDCHARGETYPEID "
-                + "AND A.CARDID=?";
+        String query = "SELECT A.CARDID, " +
+                "                       AT.AUTOMATEDCHARGETYPEID tipoPoliza, " +
+                "                AT.DESCRIPTION nombrePoliza, A.STATUS estadoPoliza  " +
+                "                  FROM SUNNEL.T_GAUTOMATEDCHARGE a, SUNNEL.T_GAUTOMATEDCHARGETYPE at " +
+                "                 WHERE A.AUTOMATEDCHARGETYPEID = AT.AUTOMATEDCHARGETYPEID " +
+                "                AND A.CARDID = ? ";
 
         ConnectionHandler connectionHandler = new ConnectionHandler();
         Connection conexion = connectionHandler.getConnection(remoteJndiSunnel);
@@ -113,18 +113,13 @@ public class ConsultaPolizas {
         List<ListaDePolizasResponse> lista = new ArrayList<>();
         ConsultaPolizasResponse response = new ConsultaPolizasResponse();
         while (rs.next()) {
-            if (rs.next()) {//llenar encabezado
-                response.setStatus("00");
-                response.setStatusCode("SUCCESS");
-                response.setStatusMessage("Proceso exitoso");
-            }
-
             ListaDePolizasResponse consultaPolizas = new ListaDePolizasResponse();
             consultaPolizas.setTipoPoliza(rs.getString("tipoPoliza"));
             consultaPolizas.setNombrePoliza(rs.getString("nombrePoliza"));
             consultaPolizas.setEstadoPoliza(rs.getString("estadoPoliza"));
             lista.add(consultaPolizas);
         }
+        response.setListaDePolizas(lista);
         return response;
     }
 

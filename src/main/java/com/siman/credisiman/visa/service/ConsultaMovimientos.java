@@ -236,11 +236,6 @@ public class ConsultaMovimientos {
 
         while (rs.next()) {
             MovimientosResponse movimientosResponse = new MovimientosResponse();
-            if (rs.next()) {//llenar encabezado
-                response1.setStatus("00");
-                response1.setStatusCode("SUCCESS");
-                response1.setStatusMessage("Proceso exitoso");
-            }
             //TODO agregar a xml
             movimientosResponse.setTipoMovimiento(rs.getString("tipoOperacion"));
             movimientosResponse.setFechaMovimiento(rs.getString("fechaTransaccion"));
@@ -249,7 +244,6 @@ public class ConsultaMovimientos {
             movimientosResponse.setMonto(rs.getString("monto"));
             movimientosResponse.setNumeroAutorizacion(rs.getString("numeroAutorizacion"));
             movimientosResponse.setDescripcionComercio(rs.getString("comercio"));
-
             listaMovimientos.add(movimientosResponse);
         }
         response1.setMovimientos(listaMovimientos);

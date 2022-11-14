@@ -61,7 +61,7 @@ public class ConsultaMovimientos {
                     if (response1 != null) {
                         return estructura(response1);
                     } else {
-                        log.info("obtenerDatosCliente response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
+                        log.info("obtenerConsultaMovimientos response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
                         return message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse);
                     }
                 case "V":
@@ -70,21 +70,21 @@ public class ConsultaMovimientos {
                     if (response2.getMovimientos().size() > 0) {
                         return estructura(response2);
                     } else {
-                        log.info("obtenerDatosCliente response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
+                        log.info("obtenerConsultaMovimientos response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
                         return message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse);
                     }
             }
         } catch (SQLException e) {
             log.error("SQL ERROR, " + e.getMessage());
-            log.info("obtenerDatosCliente response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
+            log.info("obtenerConsultaMovimientos response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         } catch (Exception ex) {
             log.error("SERVICE ERROR, " + ex.getMessage());
-            log.info("obtenerDatosCliente response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
+            log.info("obtenerConsultaMovimientos response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
 
-        log.info("obtenerDatosCliente response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
+        log.info("obtenerConsultaMovimientos response = [" + message.genericMessage("ERROR", "400", "No se encontró información con la identificación proporcionada", namespace, operationResponse) + "]");
         return message.genericMessage("ERROR", "400", "No se encontró información con la tarjeta proporcionada", namespace, operationResponse);
     }
 

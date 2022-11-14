@@ -12,39 +12,44 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ListaDePolizasResponse {
-	
-	@JsonProperty("tipoPoliza") @JsonAlias("tipoPoliza")
-    public String tipoPoliza;
-	
-	@JsonProperty("nombrePoliza") @JsonAlias("nombrePoliza")
-	    public String nombrePoliza;
-	
-	@JsonProperty("estadoPoliza") @JsonAlias("estadoPoliza")
-	    public String estadoPoliza;
 
-	public String getTipoPoliza() {
-		return tipoPoliza;
-	}
+    @JsonProperty("tipoMensaje")
+    @JsonAlias("tipoMensaje")
+    private String tipoMensaje;
 
-	public void setTipoPoliza(String tipoPoliza) {
-		this.tipoPoliza = tipoPoliza;
-	}
+    @JsonProperty("numeroTarjeta")
+    @JsonAlias("numeroTarjeta")
+    private String numeroTarjeta;
 
-	public String getNombrePoliza() {
-		return nombrePoliza;
-	}
+    @JsonProperty("tipoPoliza")
+    @JsonAlias("tipoPoliza")
+    private String tipoPoliza;
 
-	public void setNombrePoliza(String nombrePoliza) {
-		this.nombrePoliza = nombrePoliza;
-	}
+    @JsonProperty("nombrePoliza")
+    @JsonAlias("nombrePoliza")
+    private String nombrePoliza;
 
-	public String getEstadoPoliza() {
-		return estadoPoliza;
-	}
+    @JsonProperty("estadoPoliza")
+    @JsonAlias("estadoPoliza")
+    private String estadoPoliza;
 
-	public void setEstadoPoliza(String estadoPoliza) {
-		this.estadoPoliza = estadoPoliza;
-	}
+    @JsonProperty("fechaInclusion")
+    @JsonAlias("fechaInclusion")
+    private String fechaInclusion;
 
+    @JsonProperty("fechaUltimaAplicacion")
+    @JsonAlias("fechaUltimaAplicacion")
+    private String fechaUltimaAplicacion;
 
+    @JsonProperty("usuarioPoliza")
+    @JsonAlias("usuarioPoliza")
+    private String usuarioPoliza;
+
+    @JsonProperty("recargaPorInclusionDePoliza")
+    @JsonAlias("recargaPorInclusionDePoliza")
+    private String recargaPorInclusionDePoliza;
+
+    @JsonProperty("recargaPorFechaDePoliza")
+    @JsonAlias("recargaPorFechaDePoliza")
+    private String recargaPorFechaDePoliza;
 }

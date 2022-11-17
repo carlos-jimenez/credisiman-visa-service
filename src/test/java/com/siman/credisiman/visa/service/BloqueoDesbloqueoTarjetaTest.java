@@ -11,7 +11,7 @@ public class BloqueoDesbloqueoTarjetaTest {
 
     @Test
     public void obtenerConsultaSubProductosOk() {
-        XmlObject result = BloqueoDesbloqueoTarjeta.obtenerBloqueoDesbloqueoTarjeta("SLV", "4000123456780000","01","Robo", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","V");
+        XmlObject result = BloqueoDesbloqueoTarjeta.obtenerBloqueoDesbloqueoTarjeta("SV", "4573840047882285","28","M6", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","V");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());

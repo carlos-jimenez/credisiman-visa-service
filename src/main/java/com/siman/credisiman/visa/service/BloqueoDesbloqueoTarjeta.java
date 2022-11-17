@@ -25,16 +25,15 @@ public class BloqueoDesbloqueoTarjeta {
         //OBTENER DATOS
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
-            jsonSend.put("pais", pais)
-                    .put("processIdentifier", "SolicitudReposicionTarjeta")
+            jsonSend.put("country", pais)
+                    .put("processIdentifier", "BloqueoDesbloqueoTarjetas")
                     .put("tipoMensaje", 4300)
                     .put("numeroTarjeta", numeroTarjeta)
-                    .put("estadoDeseado", estadoDeseado)
-                    .put("motivo", motivo)
-                    .put("usuarioSiscard", siscardUser);
+                    .put("estadodeseado", estadoDeseado)
+                    .put("motivoCancelacion", motivo);
 
             HttpResponse<String> jsonResponse //realizar petición mediante unirest
-                    = Unirest.post(siscardUrl)
+                    = Unirest.post(siscardUrl.concat("/bloqueoDesbloqueoTarjetas"))
                     .header("Content-Type", "application/json")
                     .body(jsonSend.toString())
                     .asString();

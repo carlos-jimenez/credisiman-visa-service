@@ -14,12 +14,27 @@ import lombok.NoArgsConstructor;
 
 public class BloqueoDesbloqueoTarjetaResponse {
 
-	@JsonProperty("statusCode") @JsonAlias("statusCode")
-    public String statusCode;
+	@JsonProperty("code") @JsonAlias("code")
+    public String code;
+
+    @JsonProperty("message") @JsonAlias("message")
+    public String message;
+
+    @JsonProperty("numeroTarjeta") @JsonAlias("numeroTarjeta")
+    public String numeroTarjeta;
+
+    @JsonProperty("estadodeseado") @JsonAlias("estadodeseado")
+    public String estadodeseado;
+
+    @JsonProperty("statusMessage") @JsonAlias("statusMessage")
+    public String statusMessage;
 
     @JsonProperty("status") @JsonAlias("status")
     public String status;
 
-    @JsonProperty("statusMessage") @JsonAlias("statusMessage")
-    public String statusMessage;
+    @JsonProperty("statusCode") @JsonAlias("statusCode")
+    public String statusCode;
+
+    @JsonProperty("motivoCancelacion") @JsonAlias("motivoCancelacion")
+    public String motivoCancelacion;
 }

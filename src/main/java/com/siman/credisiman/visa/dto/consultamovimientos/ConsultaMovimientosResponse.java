@@ -1,4 +1,4 @@
-package com.siman.credisiman.visa.dto.listadotarjeta;
+package com.siman.credisiman.visa.dto.consultamovimientos;
 
 import java.util.List;
 
@@ -13,8 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ListadoTarjetasResponse {
-    @JsonProperty("statusCode") @JsonAlias("statusCode")
+public class ConsultaMovimientosResponse {
+
+	@JsonProperty("code") @JsonAlias("code")
+	public String code;
+
+	@JsonProperty("message") @JsonAlias("message")
+	public String message;
+
+	@JsonProperty("statusCode") @JsonAlias("statusCode")
     public String statusCode;
 
     @JsonProperty("status") @JsonAlias("status")
@@ -23,7 +30,7 @@ public class ListadoTarjetasResponse {
     @JsonProperty("statusMessage") @JsonAlias("statusMessage")
     public String statusMessage;
     
-    @JsonProperty("tarjetas") @JsonAlias("tarjetas")
-    public List<TarjetasResponse> tarjetas;
+    @JsonProperty("movimientos") @JsonAlias("movimientos")
+    public List<MovimientosResponse> movimientos;
 
 }

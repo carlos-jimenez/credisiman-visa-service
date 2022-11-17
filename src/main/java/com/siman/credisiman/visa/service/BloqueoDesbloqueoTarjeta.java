@@ -3,7 +3,7 @@ package com.siman.credisiman.visa.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.siman.credisiman.visa.dto.BloqueoDesbloqueoTarjetaResponse;
+import com.siman.credisiman.visa.dto.bloqueodesbloqueotarjeta.BloqueoDesbloqueoTarjetaResponse;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
@@ -60,7 +60,7 @@ public class BloqueoDesbloqueoTarjeta {
         cursor.toNextToken();
         cursor.beginElement(responseQName);
 
-        cursor.insertElementWithText(new QName(namespace, "statusCode"), response1.statusCode);
+        cursor.insertElementWithText(new QName(namespace, "statusCode"), response1.getStatusCode());
         cursor.insertElementWithText(new QName(namespace, "status"), response1.getStatus());
         cursor.insertElementWithText(new QName(namespace, "statusMessage"), response1.getStatusMessage());
 

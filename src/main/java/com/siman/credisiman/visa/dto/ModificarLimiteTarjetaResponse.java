@@ -21,28 +21,4 @@ public class ModificarLimiteTarjetaResponse {
     @JsonProperty("statusMessage") @JsonAlias("statusMessage")
     public String statusMessage;
 
-	public String getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getStatusMessage() {
-		return statusMessage;
-	}
-
-	public void setStatusMessage(String statusMessage) {
-		this.statusMessage = statusMessage;
-	}
-    
 }

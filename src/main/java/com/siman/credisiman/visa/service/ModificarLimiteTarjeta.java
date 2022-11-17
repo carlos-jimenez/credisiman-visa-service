@@ -1,5 +1,7 @@
 package com.siman.credisiman.visa.service;
 
+import com.credisiman.visa.soa.utils.Utils;
+import com.siman.credisiman.visa.utils.Message;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
@@ -23,6 +25,21 @@ public class ModificarLimiteTarjeta {
         String operationResponse = "ModificarLimiteTarjetaResponse";
         //OBTENER DATOS
         ModificarLimiteTarjetaResponse response1 = new ModificarLimiteTarjetaResponse();
+
+        Utils utils = new Utils();
+        Message message = new Message();
+
+
+        //validar campos requeridos
+        if (utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(numeroTarjeta) || utils.validateNotEmpty(numeroTarjeta)) {
+            return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(monto) || utils.validateNotEmpty(monto)) {
+            return message.genericMessage("ERROR", "025", "El campo número monto es obligatorio", namespace, operationResponse);
+        }
 
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar

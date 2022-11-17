@@ -20,20 +20,42 @@ import java.util.List;
 public class EnvioCorreoElectronico {
     private static final String namespace = "http://siman.com/EnvioCorreoElectronico";
     private static final String operationResponse = "ObtenerEnvioCorreoElectronicoResponse";
-    private static final String url = "https://mandrillapp.com/api/1.0/messages/send.json";
+
+    private static final String url="https://mandrillapp.com/api/1.0/messages/send.json";
+
+    private static final String mandrilTag="NotificacionCredisiman";
+
+    private  static final String apiKey = "md-jHsAPNoQFFypCiypPY0Flw";
 
     public static XmlObject send(String correoOrigen, String nombreOrigen, String asunto,
-                                 boolean flagImportante, String html, String apiKey, String mandrilTag,
-                                 List<EmailTo> correosDestino) {
+                                 boolean flagImportante, String html, List<EmailTo> correosDestino) {
         //validar campos requeridos
         Utils utils = new Utils();
         Message message = new Message();
+
+        if (utils.validateNotNull(correoOrigen) || utils.validateNotEmpty(correoOrigen)) {
+            log.info("correo origen required");
+            return message.genericMessage("ERROR", "025", "El campo correo origen es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(nombreOrigen) || utils.validateNotEmpty(nombreOrigen)) {
+            log.info("nombre origen required");
+            return message.genericMessage("ERROR", "025", "El campo nombre origen es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(asunto) || utils.validateNotEmpty(asunto)) {
+            log.info("asunto required");
+            return message.genericMessage("ERROR", "025", "El campo asunto es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(html) || utils.validateNotEmpty(html)) {
+            log.info("html required");
+            return message.genericMessage("ERROR", "025", "El campo html es obligatorio", namespace, operationResponse);
+        }
 
         try {
             JSONObject json = new JSONObject();//raiz
             JSONObject msg = new JSONObject();
             JSONArray to = new JSONArray();
             JSONArray tags = new JSONArray();
+
 
             json.put("key", apiKey)
                     .put("message", msg);
@@ -66,9 +88,10 @@ public class EnvioCorreoElectronico {
 
             //capturar respuesta
             MandrilResponse response1;
+            log.info(jsonResponse
+                    .getBody().replace("[","").replace("]",""));
             JSONObject response = new JSONObject(jsonResponse
-                    .getBody()
-                    .replaceAll("\u200B", ""));
+                    .getBody().replace("[","").replace("]",""));
             response1 = new ObjectMapper()
                     .readValue(response.toString(), MandrilResponse.class);
 
@@ -108,6 +131,7 @@ public class EnvioCorreoElectronico {
             cursor.insertElementWithText(new QName(namespace, "statusMessage"), statusMessage);
             cursor.toParent();
 
+            log.info("obtenerEnvioCorreoElectronico response = [" + result + "]");
             return result;
 
         } catch (Exception e) {

@@ -14,6 +14,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ListadoTarjetasResponse {
+
+    @JsonProperty("code") @JsonAlias("code")
+    private  String code;
+
+    @JsonProperty("message") @JsonAlias("message")
+    private String message;
+
     @JsonProperty("statusCode") @JsonAlias("statusCode")
     public String statusCode;
 
@@ -22,8 +29,14 @@ public class ListadoTarjetasResponse {
 
     @JsonProperty("statusMessage") @JsonAlias("statusMessage")
     public String statusMessage;
-    
-    @JsonProperty("tarjetas") @JsonAlias("tarjetas")
-    public List<TarjetasResponse> tarjetas;
+
+    @JsonProperty("cedula") @JsonAlias("cedula")
+    private String cedula;
+
+    @JsonProperty("nombreTH") @JsonAlias("nombreTH")
+    private String nombreTH;
+
+    @JsonProperty("cuentas") @JsonAlias("cuentas")
+    public List<CuentasResponse> cuentas;
 
 }

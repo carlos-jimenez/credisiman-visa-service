@@ -3,7 +3,6 @@ package com.siman.credisiman.visa.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.siman.credisiman.visa.dto.consultamovimientos.ConsultaMovimientosResponse;
 import com.siman.credisiman.visa.dto.listadotarjeta.CuentasResponse;
 import com.siman.credisiman.visa.dto.listadotarjeta.ListadoTarjetasResponse;
 import com.siman.credisiman.visa.dto.listadotarjeta.Tarjetas;
@@ -21,6 +20,8 @@ import javax.xml.namespace.QName;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListadoTarjetas {
@@ -31,9 +32,6 @@ public class ListadoTarjetas {
 
     public static XmlObject obtenerListadoTarjetas(String pais, String identificacion, String remoteJndiSunnel,
                                                    String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
-        ListadoTarjetasResponse response1 = new ListadoTarjetasResponse();
-        //OBTENER DATOS
-
         Utils utils = new Utils();
         Message message = new Message();
 
@@ -55,41 +53,34 @@ public class ListadoTarjetas {
             return message.genericMessage("ERROR", "025", "La longitud del campo identificacion debe ser menor o igual a 19", namespace, operationResponse);
         }
 
-        for (int i = 0; i < response1.getCuentas().size(); i++) {
-            CuentasResponse cuentas = response1.getCuentas().get(i);
-            for (int j = 0; j < cuentas.getTarjetas().size(); j++) {
-                TarjetasResponse tarjetas = cuentas.getTarjetas().get(j);
-                cursor.beginElement(new QName(namespace, "tarjetas"));
-                cursor.insertElementWithText(new QName(namespace, "numeroTarjeta"), tarjetas.getNumeroTarjeta());
-                cursor.insertElementWithText(new QName(namespace, "cuenta"), cuentas.getCuenta());
-                cursor.insertElementWithText(new QName(namespace, "tipoTarjeta"), tarjetas.getTipoTarjeta());
-                cursor.insertElementWithText(new QName(namespace, "nombreTH"), tarjetas.getNombreTH());
-                cursor.insertElementWithText(new QName(namespace, "estado"), tarjetas.getEstadoTarjeta());
-                cursor.insertElementWithText(new QName(namespace, "limiteCreditoLocal"), tarjetas.getLimiteCreditoLocal());
-                cursor.insertElementWithText(new QName(namespace, "limiteCreditoDolares"), tarjetas.getLimiteCreditoInter());
-                cursor.insertElementWithText(new QName(namespace, "saldoLocal"), cuentas.getSaldoLocal());
-                cursor.insertElementWithText(new QName(namespace, "saldoDolares"), cuentas.getSaldoInter());
-                cursor.insertElementWithText(new QName(namespace, "disponibleLocal"), tarjetas.getDispLocalTarjeta());
-                cursor.insertElementWithText(new QName(namespace, "disponibleDolares"), tarjetas.getDispIntTarjeta());
-                cursor.insertElementWithText(new QName(namespace, "pagoMinimoLocal"), cuentas.getPagoMinimoLocal());
-                cursor.insertElementWithText(new QName(namespace, "pagoMinimoDolares"), cuentas.getPagoMinimoInt());
-                cursor.insertElementWithText(new QName(namespace, "pagoMinimoVencidoLocal"), "");
-                cursor.insertElementWithText(new QName(namespace, "pagoMinimoVencidoDolares"), "");
-                cursor.insertElementWithText(new QName(namespace, "pagoContadoLocal"), cuentas.getPagoContadoLocal());
-                cursor.insertElementWithText(new QName(namespace, "pagoContadoDolares"), cuentas.getPagoContInt());
-                cursor.insertElementWithText(new QName(namespace, "fechaPago"), cuentas.getFechaVencimientoPago());
-                cursor.insertElementWithText(new QName(namespace, "fechaUltimoCorte"), "");
-                cursor.insertElementWithText(new QName(namespace, "saldoMonedero"), "");
-                cursor.insertElementWithText(new QName(namespace, "rombosAcumulados"), "");
-                cursor.insertElementWithText(new QName(namespace, "rombosDinero"), cuentas.getSaldoPremiacion());
-                cursor.insertElementWithText(new QName(namespace, "fondosReservados"), "");
-                cursor.toParent();
+        List<Tarjetas> response2 = new ArrayList<>();
+        List<Tarjetas> response3 = new ArrayList<>();
+
+        try {
+            //all code here
+            response2 = obtenerDatosArca(identificacion, remoteJndiSunnel);
+            if (response2.size() > 0) {
+                log.info("DATOS TARJETA PRIVADA");
+                return estructura(response2);
             }
+            response3 = obtenerDatosSiscard(pais, identificacion, siscardUrl);
+            if (response3.size() > 0) {
+                log.info("DATOS TARJETA CREDISIMAN");
+                return estructura(response3);
+            }
+            log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
+            return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
+
+        } catch (SQLException e) {
+            log.error("SQL ERROR, " + e.getMessage());
+            log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
+            return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
+        } catch (Exception ex) {
+            log.error("SERVICE ERROR, " + ex.getMessage());
+            log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
+            return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
 
-        cursor.toParent();
-
-        return result;
     }
 
     public static XmlObject estructura(List<Tarjetas> response) {
@@ -105,38 +96,39 @@ public class ListadoTarjetas {
         cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Proceso exitoso");
         //Listado tarjetas
 
-        for (int i = 0; i < response.size(); i++) {
+        for (Tarjetas tarjetas : response) {
             cursor.beginElement(new QName(namespace, "tarjetas"));
-            cursor.insertElementWithText(new QName(namespace, "numeroTarjeta"), response.get(i).getNumeroTarjeta());
-            cursor.insertElementWithText(new QName(namespace, "cuenta"), response.get(i).getCuenta());
-            cursor.insertElementWithText(new QName(namespace, "tipoTarjeta"), response.get(i).getTipoTarjeta());
-            cursor.insertElementWithText(new QName(namespace, "nombreTH"), response.get(i).getNombreTH());
-            cursor.insertElementWithText(new QName(namespace, "estado"),response.get(i).getEstado());
-            cursor.insertElementWithText(new QName(namespace, "limiteCreditoLocal"), response.get(i).getLimiteCreditoLocal());
-            cursor.insertElementWithText(new QName(namespace, "limiteCreditoDolares"), response.get(i).getLimiteCreditoDolares());
-            cursor.insertElementWithText(new QName(namespace, "saldoLocal"), response.get(i).getSaldoLocal());
-            cursor.insertElementWithText(new QName(namespace, "saldoDolares"), response.get(i).getSaldoDolares());
-            cursor.insertElementWithText(new QName(namespace, "disponibleLocal"), response.get(i).getDisponibleLocal());
-            cursor.insertElementWithText(new QName(namespace, "disponibleDolares"),response.get(i).getDisponibleDolares());
-            cursor.insertElementWithText(new QName(namespace, "pagoMinimoLocal"), response.get(i).getPagoMinimoLocal());
-            cursor.insertElementWithText(new QName(namespace, "pagoMinimoDolares"),response.get(i).getPagoMinimoDolares());
-            cursor.insertElementWithText(new QName(namespace, "pagoMinimoVencidoLocal"), response.get(i).getPagoMinimoVencidoLocal());
+            cursor.insertElementWithText(new QName(namespace, "numeroTarjeta"), tarjetas.getNumeroTarjeta());
+            cursor.insertElementWithText(new QName(namespace, "cuenta"), tarjetas.getCuenta());
+            cursor.insertElementWithText(new QName(namespace, "tipoTarjeta"), tarjetas.getTipoTarjeta());
+            cursor.insertElementWithText(new QName(namespace, "nombreTH"), tarjetas.getNombreTH());
+            cursor.insertElementWithText(new QName(namespace, "estado"), tarjetas.getEstado());
+            cursor.insertElementWithText(new QName(namespace, "limiteCreditoLocal"), tarjetas.getLimiteCreditoLocal());
+            cursor.insertElementWithText(new QName(namespace, "limiteCreditoDolares"), tarjetas.getLimiteCreditoDolares());
+            cursor.insertElementWithText(new QName(namespace, "saldoLocal"), tarjetas.getSaldoLocal());
+            cursor.insertElementWithText(new QName(namespace, "saldoDolares"), tarjetas.getSaldoDolares());
+            cursor.insertElementWithText(new QName(namespace, "disponibleLocal"), tarjetas.getDisponibleLocal());
+            cursor.insertElementWithText(new QName(namespace, "disponibleDolares"), tarjetas.getDisponibleDolares());
+            cursor.insertElementWithText(new QName(namespace, "pagoMinimoLocal"), tarjetas.getPagoMinimoLocal());
+            cursor.insertElementWithText(new QName(namespace, "pagoMinimoDolares"), tarjetas.getPagoMinimoDolares());
+            cursor.insertElementWithText(new QName(namespace, "pagoMinimoVencidoLocal"), tarjetas.getPagoMinimoVencidoLocal());
             cursor.insertElementWithText(new QName(namespace, "pagoMinimoVencidoDolares"), "");
-            cursor.insertElementWithText(new QName(namespace, "pagoContadoLocal"), response.get(i).getPagoContadoLocal());
-            cursor.insertElementWithText(new QName(namespace, "pagoContadoDolares"), response.get(i).getPagoContadoDolares());
-            cursor.insertElementWithText(new QName(namespace, "fechaPago"), response.get(i).getFechaPago());
-            cursor.insertElementWithText(new QName(namespace, "fechaUltimoCorte"), response.get(i).getFechaUltimoCorte());
-            cursor.insertElementWithText(new QName(namespace, "saldoMonedero"), response.get(i).getSaldoMonedero());
-            cursor.insertElementWithText(new QName(namespace, "rombosAcumulados"), response.get(i).getRombosAcumulados());
-            cursor.insertElementWithText(new QName(namespace, "rombosDinero"), response.get(i).getRombosDinero());
-            cursor.insertElementWithText(new QName(namespace, "fondosReservados"), response.get(i).getFondosReservados());
+            cursor.insertElementWithText(new QName(namespace, "pagoContadoLocal"), tarjetas.getPagoContadoLocal());
+            cursor.insertElementWithText(new QName(namespace, "pagoContadoDolares"), tarjetas.getPagoContadoDolares());
+            cursor.insertElementWithText(new QName(namespace, "fechaPago"), tarjetas.getFechaPago());
+            cursor.insertElementWithText(new QName(namespace, "fechaUltimoCorte"), tarjetas.getFechaUltimoCorte());
+            cursor.insertElementWithText(new QName(namespace, "saldoMonedero"), tarjetas.getSaldoMonedero());
+            cursor.insertElementWithText(new QName(namespace, "rombosAcumulados"), tarjetas.getRombosAcumulados());
+            cursor.insertElementWithText(new QName(namespace, "rombosDinero"), tarjetas.getRombosDinero());
+            cursor.insertElementWithText(new QName(namespace, "fondosReservados"), tarjetas.getFondosReservados());
             cursor.toParent();
         }
         cursor.toParent();
-        log.info("obtenerDatosCliente response = [" + result + "]");
+        log.info("ObtenerListadoTarjetas response = [" + result + "]");
         return result;
     }
-    public static ListadoTarjetasResponse obtenerDatosArca(String identificacion) throws Exception{
+
+    public static List<Tarjetas> obtenerDatosArca(String identificacion, String remoteJndiSunnel) throws Exception {
         //si no esta en siscard, buscar en arca
         String query = "SELECT c.cardid AS numeroTarjeta, " +
                 "       cl.creditlineid AS cuenta, " +
@@ -202,8 +194,8 @@ public class ListadoTarjetas {
                 "          AS pagoContadoLocal, " +
                 "       CASE WHEN fb.currencyid = 840 THEN fb.pagoContado ELSE 0 END " +
                 "          AS pagoContadoDolares, " +
-                "       bp.fechaPago AS fechaPago, " +
-                "       cl.lastinterestaccruingdate AS fechaUltimoCorte, " +
+                "       TO_CHAR(bp.fechaPago,'YYYYMMDD') AS fechaPago, " +
+                "       TO_CHAR(cl.lastinterestaccruingdate,'YYYYMMDD') AS fechaUltimoCorte, " +
                 "       ' ' AS saldoMonedero, " +
                 "       ' ' AS rombosAcumulados, " +
                 "       ' ' AS rombosDinero, " +
@@ -280,22 +272,45 @@ public class ListadoTarjetas {
                 "          ON     cb.creditlineid = cl.creditlineid " +
                 "             AND cb.currencyid = cl.currencycreditlimit " +
                 " WHERE c.closedind = 'F' AND cu.identificationnumber = ? ";//TODO obtener query arca
+        List<Tarjetas> tarjetasList = new ArrayList<>();
+        ConnectionHandler connectionHandler = new ConnectionHandler();
+        Connection conexion = connectionHandler.getConnection(remoteJndiSunnel);
+        PreparedStatement sentencia = conexion.prepareStatement(query);
+        sentencia.setString(1, identificacion); //TODO agregar parametros
+        ResultSet rs = sentencia.executeQuery();
 
-        try {
-            ConnectionHandler connectionHandler = new ConnectionHandler();
-            Connection conexion = connectionHandler.getConnection("jdbc/SUNTST");
-            PreparedStatement sentencia = conexion.prepareStatement(query);
-            sentencia.setString(1, identificacion); //TODO agregar parametros
-            ResultSet rs = sentencia.executeQuery();
-
-            while (rs.next()) {
-                //TODO agregar a xml
-                log.info(rs.getString("columna"));
-            }
+        while (rs.next()) {
+            Tarjetas tarjeta = new Tarjetas();
+            tarjeta.setNumeroTarjeta(rs.getString("numeroTarjeta"));
+            tarjeta.setCuenta(rs.getString("cuenta"));
+            tarjeta.setTipoTarjeta(rs.getString("tipoTarjeta"));
+            tarjeta.setNombreTH(rs.getString("nombreTH"));
+            tarjeta.setEstado(rs.getString("estado"));
+            tarjeta.setLimiteCreditoLocal(rs.getString("limiteCreditoLocal"));
+            tarjeta.setLimiteCreditoDolares(rs.getString("limiteCreditoDolares"));
+            tarjeta.setSaldoLocal(rs.getString("saldoLocal"));
+            tarjeta.setSaldoDolares(rs.getString("saldoDolares"));
+            tarjeta.setDisponibleLocal(rs.getString("disponibleLocal"));
+            tarjeta.setDisponibleDolares(rs.getString("disponibleDolares"));
+            tarjeta.setPagoMinimoLocal(rs.getString("pagoMinimoLocal"));
+            tarjeta.setPagoMinimoDolares(rs.getString("pagoMinimoDolares"));
+            tarjeta.setPagoMinimoVencidoLocal(rs.getString("pagoMinimoVencidoLocal"));
+            tarjeta.setPagoMinimoVencidoDolares(rs.getString("pagoMinimoVencidoDolares"));
+            tarjeta.setPagoContadoLocal(rs.getString("pagoContadoLocal"));
+            tarjeta.setPagoContadoDolares(rs.getString("pagoContadoDolares"));
+            tarjeta.setFechaPago(rs.getString("fechaPago"));
+            tarjeta.setFechaUltimoCorte(rs.getString("fechaUltimoCorte"));
+            tarjeta.setSaldoMonedero(rs.getString("saldoMonedero"));
+            tarjeta.setRombosAcumulados(rs.getString("rombosAcumulados"));
+            tarjeta.setRombosDinero(rs.getString("rombosDinero"));
+            tarjeta.setFondosReservados(rs.getString("fondosReservados"));
+            tarjetasList.add(tarjeta);
         }
 
+        return tarjetasList;
     }
-    public static ListadoTarjetasResponse obtenerDatosSiscard(String pais, String identificacion, String siscardUrl) throws Exception {
+
+    public static List<Tarjetas> obtenerDatosSiscard(String pais, String identificacion, String siscardUrl) throws Exception {
         ListadoTarjetasResponse response1 = new ListadoTarjetasResponse();
         JSONObject jsonSend = new JSONObject(); //json a enviar
         jsonSend.put("country", pais)
@@ -317,6 +332,42 @@ public class ListadoTarjetas {
                 .readValue(response.toString(), ListadoTarjetasResponse.class);
 
         log.info(new ObjectMapper().writeValueAsString(response1));
-        return response1;
+
+        List<Tarjetas> responseList = new ArrayList<>();
+
+
+        for (int i = 0; i < response1.getCuentas().size(); i++) {
+            CuentasResponse cuentas = response1.getCuentas().get(i);
+            for (TarjetasResponse tarjetas : cuentas.getTarjetas()) {
+                Tarjetas tarjeta = new Tarjetas();
+
+                tarjeta.setNumeroTarjeta(tarjetas.getNumeroTarjeta());
+                tarjeta.setCuenta(cuentas.getCuenta());
+                tarjeta.setTipoTarjeta(tarjetas.getTipoTarjeta());
+                tarjeta.setNombreTH(tarjetas.getNombreTH());
+                tarjeta.setEstado(tarjetas.getEstadoTarjeta());
+                tarjeta.setLimiteCreditoLocal(tarjetas.getLimiteCreditoLocal());
+                tarjeta.setLimiteCreditoDolares(tarjetas.getLimiteCreditoInter());
+                tarjeta.setSaldoLocal(cuentas.getSaldoLocal());
+                tarjeta.setSaldoDolares(cuentas.getSaldoInter());
+                tarjeta.setDisponibleLocal(tarjetas.getDispLocalTarjeta());
+                tarjeta.setDisponibleDolares(tarjetas.getDispIntTarjeta());
+                tarjeta.setPagoMinimoLocal(cuentas.getPagoMinimoLocal());
+                tarjeta.setPagoMinimoDolares(cuentas.getPagoMinimoInt());
+                tarjeta.setPagoMinimoVencidoLocal("");
+                tarjeta.setPagoMinimoVencidoDolares("");
+                tarjeta.setPagoContadoLocal(cuentas.getPagoContadoLocal());
+                tarjeta.setPagoContadoDolares(cuentas.getPagoContInt());
+                tarjeta.setFechaPago(cuentas.getFechaVencimientoPago());
+                tarjeta.setFechaUltimoCorte("");
+                tarjeta.setSaldoMonedero("");
+                tarjeta.setRombosAcumulados("");
+                tarjeta.setRombosDinero(cuentas.getSaldoPremiacion());
+                tarjeta.setFondosReservados("");
+
+                responseList.add(tarjeta);
+            }
+        }
+        return responseList;
     }
 }

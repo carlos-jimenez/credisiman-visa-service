@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ListadoTarjetasResponse {
+    @JsonProperty("respuestas") @JsonAlias("respuestas")
+    private Object respuestas;
 
     @JsonProperty("code") @JsonAlias("code")
     private  String code;

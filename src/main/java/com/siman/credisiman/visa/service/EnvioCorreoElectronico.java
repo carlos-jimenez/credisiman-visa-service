@@ -1,12 +1,12 @@
 package com.siman.credisiman.visa.service;
 
-import com.credisiman.visa.soa.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.siman.credisiman.visa.dto.email.EmailTo;
 import com.siman.credisiman.visa.dto.email.MandrilResponse;
 import com.siman.credisiman.visa.utils.Message;
+import com.siman.credisiman.visa.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;

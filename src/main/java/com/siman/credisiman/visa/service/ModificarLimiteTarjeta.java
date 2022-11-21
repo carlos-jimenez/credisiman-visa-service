@@ -1,7 +1,7 @@
 package com.siman.credisiman.visa.service;
 
-import com.credisiman.visa.soa.utils.Utils;
 import com.siman.credisiman.visa.utils.Message;
+import com.siman.credisiman.visa.utils.Utils;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;

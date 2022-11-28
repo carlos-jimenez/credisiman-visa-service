@@ -3,21 +3,26 @@ package com.siman.credisiman.visa.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+
 import com.siman.credisiman.visa.dto.email.EmailTo;
 import com.siman.credisiman.visa.dto.email.MandrilResponse;
 import com.siman.credisiman.visa.utils.Message;
 import com.siman.credisiman.visa.utils.Utils;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.namespace.QName;
+import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+
 public class EnvioCorreoElectronico {
+
+    private static Logger log = LoggerFactory.getLogger(EnvioCorreoElectronico.class);
     private static final String namespace = "http://siman.com/EnvioCorreoElectronico";
     private static final String operationResponse = "ObtenerEnvioCorreoElectronicoResponse";
 
@@ -28,7 +33,7 @@ public class EnvioCorreoElectronico {
     private  static final String apiKey = "md-jHsAPNoQFFypCiypPY0Flw";
 
     public static XmlObject send(String correoOrigen, String nombreOrigen, String asunto,
-                                 boolean flagImportante, String html, List<EmailTo> correosDestino) {
+                                 boolean flagImportante, String html, String listaCorreos) {
         //validar campos requeridos
         Utils utils = new Utils();
         Message message = new Message();
@@ -51,6 +56,21 @@ public class EnvioCorreoElectronico {
         }
 
         try {
+
+            String lista[] = listaCorreos.split(";");
+            String usuario[];
+            List<EmailTo> correos= new ArrayList<>();
+            EmailTo emailT = new EmailTo();
+
+            for (String s: lista) {
+                usuario =  s.split(",");
+
+                emailT = new EmailTo();
+                emailT.setName(usuario[1].trim());
+                emailT.setEmail(usuario[0].trim());
+                correos.add(emailT);
+            }
+
             JSONObject json = new JSONObject();//raiz
             JSONObject msg = new JSONObject();
             JSONArray to = new JSONArray();
@@ -66,7 +86,7 @@ public class EnvioCorreoElectronico {
                     .put("from_name", nombreOrigen)
                     .put("important", flagImportante);
 
-            correosDestino.forEach(emailTo -> {
+            correos.forEach(emailTo -> {
                 JSONObject dest = new JSONObject();
                 dest.put("email", emailTo.getEmail())
                         .put("name", emailTo.getName())
@@ -109,6 +129,11 @@ public class EnvioCorreoElectronico {
                     statusMessage = response1.getMessage();
                     break;
                 case "queued":
+                    statusCode = "500";
+                    status = "ERROR";
+                    statusMessage = response1.getQueued_reason();
+                    break;
+                case "invalid":
                     statusCode = "500";
                     status = "ERROR";
                     statusMessage = response1.getQueued_reason();

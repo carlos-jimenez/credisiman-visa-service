@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ListadoEstadosCuentas {
+public class ListadoEstadosCuentasTest {
     private static final Logger log = LoggerFactory.getLogger(ListadoEstadosCuentas.class);
     private static final String namespace = "http://siman.com/ListadoEstadosCuenta";
     private static final String operationResponse = "ObtenerListadoEstadosCuentaResponse";

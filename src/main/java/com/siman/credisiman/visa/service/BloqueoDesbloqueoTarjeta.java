@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.siman.credisiman.visa.dto.bloqueodesbloqueotarjeta.BloqueoDesbloqueoTarjetaResponse;
+import com.siman.credisiman.visa.utils.Message;
+import com.siman.credisiman.visa.utils.Utils;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.json.JSONObject;
@@ -23,6 +25,41 @@ public class BloqueoDesbloqueoTarjeta {
 
         BloqueoDesbloqueoTarjetaResponse response1 = new BloqueoDesbloqueoTarjetaResponse();
         //OBTENER DATOS
+
+        //validar campos requeridos
+        Utils utils = new Utils();
+        Message message = new Message();
+
+        if (utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
+            log.info("pais required");
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(numeroTarjeta) || utils.validateNotEmpty(numeroTarjeta)) {
+            log.info("numero tarjeta required");
+            return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(motivo) || utils.validateNotEmpty(motivo)) {
+            log.info("motivo required");
+            return message.genericMessage("ERROR", "025", "El campo motivo es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(estadoDeseado) || utils.validateNotEmpty(estadoDeseado)) {
+            log.info("estado deseado required");
+            return message.genericMessage("ERROR", "025", "El campo estado deseado es obligatorio", namespace, operationResponse);
+        }
+
+        //validar longitudes
+        if (!utils.validateLongitude(pais, 3)) {
+            log.info("pais, size overload");
+            return message.genericMessage("ERROR", "025", "La longitud del campo pais debe ser menor o igual a 3", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(numeroTarjeta, 16)) {
+            log.info("identificacion, size overload");
+            return message.genericMessage("ERROR", "025",
+                    "La longitud del campo número tarjeta debe ser menor o igual a 16", namespace, operationResponse);
+        }
+
+
+
         try {
             JSONObject jsonSend = new JSONObject(); //json a enviar
             jsonSend.put("country", pais)

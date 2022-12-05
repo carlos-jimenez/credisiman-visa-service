@@ -15,19 +15,11 @@ public class ConsultaMovimientosTest {
 
         XmlObject result = ConsultaMovimientos.obtenerConsultaMovimientos("SLV",
                 "4000123456780000", "20220701", "20220731",
-                "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
-        int i = 0;
+                "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","P");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
 
-        //Data
-        XmlObject[] movimientos = result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:movimientos");
-        while (i < movimientos.length) {
-            String numeroAutorizacion = ((SimpleValue) movimientos[i].selectPath("declare namespace ns='" + NS + "' " + ".//ns:numeroAutorizacion")[0]).getStringValue();
-            assertEquals(ListadoNumeroAutorizacion[i], numeroAutorizacion);
-            i++;
-        }
     }
 }

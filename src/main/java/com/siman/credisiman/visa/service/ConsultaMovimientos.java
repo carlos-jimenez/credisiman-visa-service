@@ -4,17 +4,43 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.siman.credisiman.visa.utils.Message;
+import com.siman.credisiman.visa.utils.Utils;
 
 import javax.xml.namespace.QName;
 
 public class ConsultaMovimientos {
-    private static Logger log = LoggerFactory.getLogger(ConsultaMovimientos.class);
-
+    private static final Logger log = LoggerFactory.getLogger(ConsultaMovimientos.class);
+    private static final String namespace = "http://siman.com/ConsultaMovimientos";
+    private static final String operationResponse = "ObtenerConsultaMovimientosResponse";
 	public static XmlObject obtenerConsultaMovimientos(String pais, String numeroTarjeta, String fechaInicial,
 			String fechaFinal, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
-			String binCredisiman) {
-        String namespace = "http://siman.com/ConsultaMovimientos";
-        String operationResponse = "ObtenerConsultaMovimientosResponse";
+			String binCredisiman, String tipoTarjeta) {
+
+        //validar campos requeridos
+        Utils utils = new Utils();
+        Message message = new Message();
+
+        if (utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
+            log.info("pais required");
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(numeroTarjeta) || utils.validateNotEmpty(numeroTarjeta)) {
+            log.info("numero tarjeta required");
+            return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
+        }
+
+        //validar longitudes
+        if (!utils.validateLongitude(pais, 3)) {
+            log.info("pais, size overload");
+            return message.genericMessage("ERROR", "025", "La longitud del campo pais debe ser menor o igual a 3", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(numeroTarjeta, 16)) {
+            log.info("identificacion, size overload");
+            return message.genericMessage("ERROR", "025",
+                    "La longitud del campo número tarjeta debe ser menor o igual a 16", namespace, operationResponse);
+        }
+
         String[] numeroAutorizacion = {"123456701", "123456702", "123456703"};
 
         //OBTENER DATOS

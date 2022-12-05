@@ -12,7 +12,7 @@ public class ModificarLimiteTarjeta {
 
 	public static XmlObject modificarLimiteTarjeta(String pais, String identificacion, String monto,
 			String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
-			String binCredisiman) {
+			String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/ModificarLimiteTarjeta";
         String operationResponse = "ModificarLimiteTarjetaResponse";
         //OBTENER DATOS

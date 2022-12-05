@@ -12,19 +12,11 @@ public class consultaPolizasTest {
 
     @Test
     public void obtenerConsultaSubProductosOk() {
-        XmlObject result = ConsultaPolizas.obtenerConsultaPolizas("SLV", "0398765432", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
-        int i = 0;
+        XmlObject result = ConsultaPolizas.obtenerConsultaPolizas("SLV", "0398765432", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","P");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
 
-        //Data
-        XmlObject[] polizas = result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:polizas");
-        while (i < polizas.length) {
-            String nombrePoliza = ((SimpleValue) polizas[i].selectPath( "declare namespace ns='" + NS + "' " + ".//ns:nombrePoliza")[0]).getStringValue();
-            assertEquals(listadoPolizas[i], nombrePoliza);
-            i++;
-        }
     }
 }

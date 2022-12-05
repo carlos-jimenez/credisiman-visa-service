@@ -12,20 +12,11 @@ public class ListadoEstadosCuentasTest {
 
     @Test
     public void obtenerListadoEstadosCuentasOk() {
-        XmlObject result = ListadoEstadosCuentas.obtenerListadoEstadosCuenta("SLV", "4000123456780000", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
-        int i = 0;
+        XmlObject result = ListadoEstadosCuentas.obtenerListadoEstadosCuenta("SLV", "4000123456780000", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","P");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" +NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
-
-        //Data
-        XmlObject[] fechasCorte = result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:fechasCorte");
-        while (i < fechasCorte.length) {
-            String fechaCorte = ((SimpleValue) fechasCorte[i].selectPath( "declare namespace ns='" + NS + "' " + ".//ns:fechaCorte")[0]).getStringValue();
-            assertEquals(listadoFechaCorte[i], fechaCorte);
-            i++;
-        }
     }
 
 }

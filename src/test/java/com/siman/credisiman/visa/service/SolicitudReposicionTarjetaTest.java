@@ -11,12 +11,12 @@ public class SolicitudReposicionTarjetaTest {
 
     @Test
     public void obtenerConsultaSubProductosOk() {
-        XmlObject result = SolicitudReposicionTarjeta.crearSolicitudReposicionTarjeta("SV", "4573840161497142","CindySolisFernandez","1", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
+        XmlObject result = SolicitudReposicionTarjeta.crearSolicitudReposicionTarjeta("SLV", "4000123456780000","JUAN PEREZ","1", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","P");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
         //Data
-      //  assertEquals("4000123456780001", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:nuevoNumeroTarjeta")[0]).getStringValue());
+        assertEquals("4000123456780001", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:nuevoNumeroTarjeta")[0]).getStringValue());
     }
 }

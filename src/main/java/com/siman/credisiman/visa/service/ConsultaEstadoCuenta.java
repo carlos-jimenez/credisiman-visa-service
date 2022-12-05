@@ -10,9 +10,9 @@ import javax.xml.namespace.QName;
 public class ConsultaEstadoCuenta {
     private static final Logger log = LoggerFactory.getLogger(ConsultaEstadoCuenta.class);
 
-	public static XmlObject obtenerConsultaEstadoCuenta(String pais, String numeroTarjeta, String cuenta,
-			String fechaCorte, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
-			String binCredisiman) {
+    public static XmlObject obtenerConsultaEstadoCuenta(String pais, String numeroTarjeta, String cuenta,
+                                                        String fechaCorte, String remoteJndiSunnel, String remoteJndiOrion, String siscardUrl, String siscardUser,
+                                                        String binCredisiman, String tipoTarjeta) {
         String namespace = "http://siman.com/ConsultaEstadoCuenta";
         String operationResponse = "ObtenerConsultaEstadoCuentaResponse";
         //OBTENER DATOS
@@ -24,8 +24,8 @@ public class ConsultaEstadoCuenta {
         cursor.insertElementWithText(new QName(namespace, "statusCode"), "00");
         cursor.insertElementWithText(new QName(namespace, "status"), "SUCCESS");
         cursor.insertElementWithText(new QName(namespace, "statusMessage"), "Proceso exitoso");
-        cursor.insertElementWithText(new QName(namespace, "correo"),"juan.perez@correo.com");
-        cursor.insertElementWithText(new QName(namespace, "archivo"),"StringBase24");
+        cursor.insertElementWithText(new QName(namespace, "correo"), "juan.perez@correo.com");
+        cursor.insertElementWithText(new QName(namespace, "archivo"), "StringBase24");
         cursor.toParent();
 
         log.info("obtenerConsultaEstadoCuenta response = [" + result.toString() + "]");

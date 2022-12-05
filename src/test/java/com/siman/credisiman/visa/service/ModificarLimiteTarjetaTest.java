@@ -11,7 +11,7 @@ public class ModificarLimiteTarjetaTest {
 
     @Test
     public void obtenerConsultaSubProductosOk() {
-        XmlObject result = ModificarLimiteTarjeta.modificarLimiteTarjeta("SLV", "0398765432","000000500000", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831");
+        XmlObject result = ModificarLimiteTarjeta.modificarLimiteTarjeta("SLV", "0398765432","000000500000", "jndi/SimacSV", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","P");
 
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());

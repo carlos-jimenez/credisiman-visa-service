@@ -34,13 +34,33 @@ public class ConsultaPolizas {
         Utils utils = new Utils();
         Message message = new Message();
 
+        if (utils.validateNotNull(pais) || utils.validateNotEmpty(pais)) {
+            log.info("pais required");
+            return message.genericMessage("ERROR", "025", "El campo pais es obligatorio", namespace, operationResponse);
+        }
+        if (utils.validateNotNull(numeroTarjeta) || utils.validateNotEmpty(numeroTarjeta)) {
+            log.info("numero tarjeta required");
+            return message.genericMessage("ERROR", "025", "El campo número tarjeta es obligatorio", namespace, operationResponse);
+        }
+
+        //validar longitudes
+        if (!utils.validateLongitude(pais, 3)) {
+            log.info("pais, size overload");
+            return message.genericMessage("ERROR", "025", "La longitud del campo pais debe ser menor o igual a 3", namespace, operationResponse);
+        }
+        if (!utils.validateLongitude(numeroTarjeta, 16)) {
+            log.info("identificacion, size overload");
+            return message.genericMessage("ERROR", "025",
+                    "La longitud del campo número tarjeta debe ser menor o igual a 16", namespace, operationResponse);
+        }
+
         ConsultaPolizasResponse response1;
         try {
             switch (tipoTarjeta) {
                 case "P":
                     //datos tarjeta privada
                     response1 = obtenerDatosArca(remoteJndiSunnel, numeroTarjeta);
-                    if (response1.getListaDePolizas().size()>0  &&response1 != null) {
+                    if (response1 != null) {
                         return estructura(response1);
                     } else {
                         log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
@@ -49,7 +69,7 @@ public class ConsultaPolizas {
                 case "V":
                     //datos tarjeta visa
                     ConsultaPolizasResponse response2 = obtenerDatosSiscard(pais, numeroTarjeta, siscardUrl);
-                    if (response2.getListaDePolizas().size() > 0) {
+                    if (response2 != null) {
                         return estructura(response2);
                     } else {
                         log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
@@ -57,16 +77,12 @@ public class ConsultaPolizas {
                     }
             }
         } catch (SQLException e) {
-            log.error("SQL ERROR, " + e.getMessage());
-            log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
+        } catch (NullPointerException nul) {
+            return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            log.error("SERVICE ERROR, " + ex.getMessage());
-            log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
-        log.info("obtenerConsultaPolizas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
         return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
 
     }

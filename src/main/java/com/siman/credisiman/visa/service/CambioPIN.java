@@ -101,7 +101,7 @@ public class CambioPIN {
         CambioPinResponse response1 = new CambioPinResponse();
 
         jsonSend.put("country", pais)
-                .put("processIdentifier", "ConsultaTransaccionesNotificaciones")
+                .put("processIdentifier", "cambioPIN")
                 .put("numeroTarjeta", numeroTarjeta)
                 .put("nip", nip);
 

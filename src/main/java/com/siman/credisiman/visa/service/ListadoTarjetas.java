@@ -26,9 +26,8 @@ import java.util.List;
 
 public class ListadoTarjetas {
     private static final Logger log = LoggerFactory.getLogger(ListadoTarjetas.class);
-    private static final String namespace = "http://siman.com/ConsultaListadoTarjetas";
-    private static final String operationResponse = "ObtenerListadoTarjetasResponse";
-
+    private static final String namespace = "http://siman.com/ListadoTarjetas";
+    private static final String operationResponse = "ListadoTarjetasResponse";
 
     public static XmlObject obtenerListadoTarjetas(String pais, String identificacion, String remoteJndiSunnel,
                                                    String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
@@ -59,7 +58,7 @@ public class ListadoTarjetas {
         try {
             //all code here
             response2 = obtenerDatosArca(identificacion, remoteJndiSunnel);
-            if (response2.size() > 0) {
+            if (!response2.isEmpty() && response2 != null) {
                 log.info("DATOS TARJETA PRIVADA");
                 return estructura(response2);
             }
@@ -75,6 +74,8 @@ public class ListadoTarjetas {
             log.error("SQL ERROR, " + e.getMessage());
             log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
+        }catch (NullPointerException nul) {
+            return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
         } catch (Exception ex) {
             log.error("SERVICE ERROR, " + ex.getMessage());
             log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");

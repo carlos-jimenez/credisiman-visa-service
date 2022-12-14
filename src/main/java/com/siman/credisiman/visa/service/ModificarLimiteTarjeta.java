@@ -50,7 +50,7 @@ public class ModificarLimiteTarjeta {
                     .put("monto", monto);
 
             HttpResponse<String> jsonResponse //realizar petición mediante unirest
-                    = Unirest.post(siscardUrl)
+                    = Unirest.post(siscardUrl.concat("/modificarLimiteCredito"))
                     .header("Content-Type", "application/json")
                     .body(jsonSend.toString())
                     .asString();

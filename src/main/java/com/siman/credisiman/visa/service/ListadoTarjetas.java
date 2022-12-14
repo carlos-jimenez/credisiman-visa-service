@@ -27,7 +27,8 @@ import java.util.List;
 public class ListadoTarjetas {
     private static final Logger log = LoggerFactory.getLogger(ListadoTarjetas.class);
     private static final String namespace = "http://siman.com/ListadoTarjetas";
-    private static final String operationResponse = "ListadoTarjetasResponse";
+    private static final String operationResponse = "ObtenerListadoTarjetasResponse";
+
 
     public static XmlObject obtenerListadoTarjetas(String pais, String identificacion, String remoteJndiSunnel,
                                                    String remoteJndiOrion, String siscardUrl, String siscardUser, String binCredisiman) {
@@ -52,36 +53,35 @@ public class ListadoTarjetas {
             return message.genericMessage("ERROR", "025", "La longitud del campo identificacion debe ser menor o igual a 19", namespace, operationResponse);
         }
 
-        List<Tarjetas> response2 = new ArrayList<>();
-        List<Tarjetas> response3 = new ArrayList<>();
-
         try {
-            //all code here
-            response2 = obtenerDatosArca(identificacion, remoteJndiSunnel);
-            if (!response2.isEmpty() && response2 != null) {
-                log.info("DATOS TARJETA PRIVADA");
-                return estructura(response2);
-            }
+            List<Tarjetas> response3 = null;
             response3 = obtenerDatosSiscard(pais, identificacion, siscardUrl);
-            if (response3.size() > 0) {
-                log.info("DATOS TARJETA CREDISIMAN");
+            log.info("tarjetas evertec: " + response3.size());
+            if (response3 != null) {
+                log.info("EVERTEC");
                 return estructura(response3);
             }
-            log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse) + "]");
-            return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
+
+            List<Tarjetas> response2 = obtenerDatosArca(identificacion, remoteJndiSunnel);
+            if (response2 != null) {
+                log.info("ARCA");
+                return estructura(response2);
+            }
+
+
+            return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados.", namespace, operationResponse);
 
         } catch (SQLException e) {
-            log.error("SQL ERROR, " + e.getMessage());
+            e.printStackTrace();
             log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
-        }catch (NullPointerException nul) {
+        } catch (NullPointerException nul) {
+            nul.printStackTrace();
             return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
         } catch (Exception ex) {
-            log.error("SERVICE ERROR, " + ex.getMessage());
             log.info("ObtenerListadoTarjetas response = [" + message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse) + "]");
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
-
     }
 
     public static XmlObject estructura(List<Tarjetas> response) {
@@ -279,43 +279,50 @@ public class ListadoTarjetas {
         PreparedStatement sentencia = conexion.prepareStatement(query);
         sentencia.setString(1, identificacion); //TODO agregar parametros
         ResultSet rs = sentencia.executeQuery();
+        int counter = 0;
 
         while (rs.next()) {
+            counter++;
             Tarjetas tarjeta = new Tarjetas();
-            tarjeta.setNumeroTarjeta(rs.getString("numeroTarjeta"));
-            tarjeta.setCuenta(rs.getString("cuenta"));
-            tarjeta.setTipoTarjeta(rs.getString("tipoTarjeta"));
-            tarjeta.setNombreTH(rs.getString("nombreTH"));
-            tarjeta.setEstado(rs.getString("estado"));
-            tarjeta.setLimiteCreditoLocal(rs.getString("limiteCreditoLocal"));
-            tarjeta.setLimiteCreditoDolares(rs.getString("limiteCreditoDolares"));
-            tarjeta.setSaldoLocal(rs.getString("saldoLocal"));
-            tarjeta.setSaldoDolares(rs.getString("saldoDolares"));
-            tarjeta.setDisponibleLocal(rs.getString("disponibleLocal"));
-            tarjeta.setDisponibleDolares(rs.getString("disponibleDolares"));
-            tarjeta.setPagoMinimoLocal(rs.getString("pagoMinimoLocal"));
-            tarjeta.setPagoMinimoDolares(rs.getString("pagoMinimoDolares"));
-            tarjeta.setPagoMinimoVencidoLocal(rs.getString("pagoMinimoVencidoLocal"));
-            tarjeta.setPagoMinimoVencidoDolares(rs.getString("pagoMinimoVencidoDolares"));
-            tarjeta.setPagoContadoLocal(rs.getString("pagoContadoLocal"));
-            tarjeta.setPagoContadoDolares(rs.getString("pagoContadoDolares"));
-            tarjeta.setFechaPago(rs.getString("fechaPago"));
-            tarjeta.setFechaUltimoCorte(rs.getString("fechaUltimoCorte"));
-            tarjeta.setSaldoMonedero(rs.getString("saldoMonedero"));
-            tarjeta.setRombosAcumulados(rs.getString("rombosAcumulados"));
-            tarjeta.setRombosDinero(rs.getString("rombosDinero"));
-            tarjeta.setFondosReservados(rs.getString("fondosReservados"));
+            tarjeta.setNumeroTarjeta((rs.getString("numeroTarjeta") != null) ? rs.getString("numeroTarjeta") : "0");
+            tarjeta.setCuenta((rs.getString("cuenta") != null ? rs.getString("cuenta") : "0"));
+            tarjeta.setTipoTarjeta((rs.getString("tipoTarjeta") != null) ? rs.getString("tipoTarjeta") : " ");
+            tarjeta.setNombreTH((rs.getString("nombreTH") != null) ? rs.getString("nombreTH") : " ");
+            tarjeta.setEstado((rs.getString("estado") != null) ? rs.getString("estado") : " ");
+            tarjeta.setLimiteCreditoLocal((rs.getString("limiteCreditoLocal") != null) ? rs.getString("limiteCreditoLocal") : "0");
+            tarjeta.setLimiteCreditoDolares((rs.getString("limiteCreditoDolares") != null) ? rs.getString("limiteCreditoDolares") : "0");
+            tarjeta.setSaldoLocal((rs.getString("saldoLocal") != null) ? rs.getString("saldoLocal") : "0");
+            tarjeta.setSaldoDolares((rs.getString("saldoDolares") != null) ? rs.getString("saldoDolares") : "0");
+            tarjeta.setDisponibleLocal((rs.getString("disponibleLocal") != null) ? rs.getString("disponibleLocal") : "0");
+            tarjeta.setDisponibleDolares((rs.getString("disponibleDolares") != null) ? rs.getString("disponibleDolares") : "0");
+            tarjeta.setPagoMinimoLocal((rs.getString("pagoMinimoLocal") != null) ? rs.getString("pagoMinimoLocal") : "0");
+            tarjeta.setPagoMinimoDolares((rs.getString("pagoMinimoDolares") != null) ? rs.getString("pagoMinimoDolares") : "0");
+            tarjeta.setPagoMinimoVencidoLocal((rs.getString("pagoMinimoVencidoLocal") != null) ? rs.getString("pagoMinimoVencidoLocal") : "0");
+            tarjeta.setPagoMinimoVencidoDolares((rs.getString("pagoMinimoVencidoDolares") != null) ? rs.getString("pagoMinimoVencidoDolares") : "0");
+            tarjeta.setPagoContadoLocal((rs.getString("pagoContadoLocal") != null) ? rs.getString("pagoContadoLocal") : "0");
+            tarjeta.setPagoContadoDolares((rs.getString("pagoContadoDolares") != null) ? rs.getString("pagoContadoDolares") : "0");
+            tarjeta.setFechaPago((rs.getString("fechaPago") != null) ? rs.getString("fechaPago") : " ");
+            tarjeta.setFechaUltimoCorte((rs.getString("fechaUltimoCorte") != null) ? rs.getString("fechaUltimoCorte") : " ");
+            tarjeta.setSaldoMonedero(" ");
+            tarjeta.setRombosAcumulados(" ");
+            tarjeta.setRombosDinero(" ");
+            tarjeta.setFondosReservados(" ");
             tarjetasList.add(tarjeta);
         }
-
-        return tarjetasList;
+        log.info("registros encontrados: " + counter);
+        conexion.close();
+        if (counter > 0) {
+            return tarjetasList;
+        } else {
+            return null;
+        }
     }
 
     public static List<Tarjetas> obtenerDatosSiscard(String pais, String identificacion, String siscardUrl) throws Exception {
         ListadoTarjetasResponse response1 = new ListadoTarjetasResponse();
         JSONObject jsonSend = new JSONObject(); //json a enviar
         jsonSend.put("country", pais)
-                .put("processIdentifier", "ListadoTarjetas")
+                .put("processIdentifier", "ConsultaCuentas")
                 .put("cedula", identificacion)
                 .put("typeService", "");
 
@@ -326,16 +333,9 @@ public class ListadoTarjetas {
                 .asString();
 
         //capturar respuesta
-        JSONObject response = new JSONObject(jsonResponse
-                .getBody()
-                .replaceAll("u200B", ""));
-        response1 = new ObjectMapper()
-                .readValue(response.toString(), ListadoTarjetasResponse.class);
-
-        log.info(new ObjectMapper().writeValueAsString(response1));
-
+        JSONObject response = new JSONObject(jsonResponse.getBody());
+        response1 = new ObjectMapper().readValue(response.toString(), ListadoTarjetasResponse.class);
         List<Tarjetas> responseList = new ArrayList<>();
-
 
         for (int i = 0; i < response1.getCuentas().size(); i++) {
             CuentasResponse cuentas = response1.getCuentas().get(i);
@@ -355,16 +355,16 @@ public class ListadoTarjetas {
                 tarjeta.setDisponibleDolares(tarjetas.getDispIntTarjeta());
                 tarjeta.setPagoMinimoLocal(cuentas.getPagoMinimoLocal());
                 tarjeta.setPagoMinimoDolares(cuentas.getPagoMinimoInt());
-                tarjeta.setPagoMinimoVencidoLocal("");
-                tarjeta.setPagoMinimoVencidoDolares("");
+                tarjeta.setPagoMinimoVencidoLocal(" ");
+                tarjeta.setPagoMinimoVencidoDolares(" ");
                 tarjeta.setPagoContadoLocal(cuentas.getPagoContadoLocal());
                 tarjeta.setPagoContadoDolares(cuentas.getPagoContInt());
                 tarjeta.setFechaPago(cuentas.getFechaVencimientoPago());
-                tarjeta.setFechaUltimoCorte("");
-                tarjeta.setSaldoMonedero("");
-                tarjeta.setRombosAcumulados("");
+                tarjeta.setFechaUltimoCorte(" ");
+                tarjeta.setSaldoMonedero(" ");
+                tarjeta.setRombosAcumulados(" ");
                 tarjeta.setRombosDinero(cuentas.getSaldoPremiacion());
-                tarjeta.setFondosReservados("");
+                tarjeta.setFondosReservados(" ");
 
                 responseList.add(tarjeta);
             }

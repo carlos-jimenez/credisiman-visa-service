@@ -1,5 +1,10 @@
 package com.siman.credisiman.visa.utils;
 
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -92,6 +97,14 @@ public class Utils {
         return cadena[1].length() == presicion;
     }
 
+    public static String blob_to_base64(InputStream blob, int longitud) throws IOException {
+        InputStream finput = blob;
+        byte[] imageBytes = new byte[(int)longitud];
+        finput.read(imageBytes, 0, imageBytes.length);
+        finput.close();
+        String pdf_final = Base64.encodeBase64String(imageBytes);
+        return pdf_final;
+    }
     public boolean validateLongitude(String s, Integer longitude) {
         return s.length() <= longitude;
     }

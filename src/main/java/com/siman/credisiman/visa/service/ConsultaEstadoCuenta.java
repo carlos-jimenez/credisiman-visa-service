@@ -3,7 +3,6 @@ package com.siman.credisiman.visa.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.siman.credisiman.visa.dto.consultamovimientos.ConsultaMovimientosResponse;
 import com.siman.credisiman.visa.dto.crm.AccountState;
 import com.siman.credisiman.visa.dto.crm.EstadoCuenta;
 import com.siman.credisiman.visa.dto.crm.LoginResponse;
@@ -18,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.namespace.QName;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,11 +60,12 @@ public class ConsultaEstadoCuenta {
                     response3 = EstadoCuentaOrionPrivada(remoteJndiOrion, pais, identificacion, numeroTarjeta, fechaCorte);
 
                     if (response1 != null) {
+                        log.info("RESPONSE" + estructura(response1, "CRM"));
                         return estructura(response1, "CRM");
-                    } else if (response3 != null) {
-                        return estructura(response1, "ORION_PRIVADA");
-                    } else {
-                        return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
+                    }
+                    if (response3 != null) {
+                        log.info("RESPONSE" + estructura(response3, "ORION_PRIVADA"));
+                        return estructura(response3, "ORION_PRIVADA");
                     }
                 case "V":
                     //datos tarjeta visa
@@ -72,15 +74,13 @@ public class ConsultaEstadoCuenta {
 
                     if (response2 != null) {
                         return estructura(response2, "ORION_VISA");
-                    } else {
-                        return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
                     }
             }
         } catch (Exception e) {
             e.printStackTrace();
             return message.genericMessage("ERROR", "600", "Error general contacte al administrador del sistema...", namespace, operationResponse);
         }
-
+        log.info("NOT FOUND");
         return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados", namespace, operationResponse);
     }
 
@@ -122,9 +122,18 @@ public class ConsultaEstadoCuenta {
         if (response.getAccess_token() != null) {
             validation = ValidateloginCrm(response.getAccess_token(), urlCrm);
             if (validation.getResponse().getError_message().equals("Sucess")) {
+                log.info("token valid");
                 estadocuenta = consultaEstadoCuentaCrm(numeroTarjeta, fechaCorte, response.getAccess_token(), pais, urlCrm);
+                log.info(estadocuenta.getErrorMessage());
+                if (estadocuenta.getErrorMessage().equals("No data found")) {
+                    return null;
+                }
+                if (estadocuenta.getErrorMessage().equals("Bad request.Tarjeta Invalida")) {
+                    return null;
+                }
                 return estadocuenta;
             } else {
+                log.info("invalid token");
                 estadocuenta = new EstadoCuenta();
                 estadocuenta.setErrorMessage(validation.getResponse().getError_message());
                 estadocuenta.setErrorMessage(validation.getResponse().getError_code());
@@ -136,25 +145,29 @@ public class ConsultaEstadoCuenta {
 
     public static EstadoCuenta EstadoCuentaOrionVisa(String remoteOrionJndi, String pais, String identificacion,
                                                      String numeroTarjeta, String fechaCorte) throws Exception {
-        String query1 = "SELECT eco.archivo_pdf, ' ' as correo  " +
+        String query1 = "SELECT (eco.archivo_pdf) as archivo_pdf, ' ' as correo," +
+                " dbms_lob.getlength(eco.archivo_pdf) as archivo_pdf_length  " +
                 "  FROM ORIONREPOSV.als_estados_cuenta_orion eco " +
                 " WHERE     eco.digitos_tarjeta = ? " +
                 "       AND eco.id_cliente = ? " +
                 "       AND eco.fecha_corte = TO_DATE (? , 'YYYYMMDD') ";
 
-        String query2 = "SELECT eco.archivo_pdf, ' ' as correo  " +
+        String query2 = "SELECT base64encode(eco.archivo_pdf) as archivo_pdf, ' ' as correo," +
+                " dbms_lob.getlength(eco.archivo_pdf) as archivo_pdf_length  " +
                 "  FROM ORIONREPOGT.als_estados_cuenta_orion eco " +
                 " WHERE     eco.digitos_tarjeta = ? " +
                 "       AND eco.id_cliente = ? " +
                 "       AND eco.fecha_corte = TO_DATE (? , 'YYYYMMDD') ";
 
-        String query3 = "SELECT eco.archivo_pdf, ' ' as correo  " +
+        String query3 = "SELECT base64encode(eco.archivo_pdf) as archivo_pdf, ' ' as correo, " +
+                "dbms_lob.getlength(eco.archivo_pdf) as archivo_pdf_length  " +
                 "  FROM ORIONREPONI.als_estados_cuenta_orion eco " +
                 " WHERE     eco.digitos_tarjeta = ? " +
                 "       AND eco.id_cliente = ? " +
                 "       AND eco.fecha_corte = TO_DATE (? , 'YYYYMMDD') ";
 
-        String query4 = "SELECT eco.archivo_pdf, ' ' as correo  " +
+        String query4 = "SELECT base64encode(eco.archivo_pdf) as archivo_pdf, ' ' as correo," +
+                " dbms_lob.getlength(eco.archivo_pdf) as archivo_pdf_length " +
                 "  FROM ORIONREPOCR.als_estados_cuenta_orion eco " +
                 " WHERE     eco.digitos_tarjeta = ? " +
                 "       AND eco.id_cliente = ? " +
@@ -186,7 +199,7 @@ public class ConsultaEstadoCuenta {
                 tarjeta = Utils.obtenerTarjeta(numeroTarjeta, 6);
             }
         }
-
+        log.info("tarjeta visa: " + tarjeta);
         sentencia.setString(1, tarjeta); // agregar parametros
         sentencia.setString(2, identificacion);
         sentencia.setString(3, fechaCorte);
@@ -196,34 +209,48 @@ public class ConsultaEstadoCuenta {
         AccountState accountState = new AccountState();
         List<AccountState> lista = new ArrayList<>();
         int counter = 0;
+
         while (rs.next()) {
             counter++;
-            accountState.setEstadoCuenta(rs.getString("archivo_pdf"));
+            InputStream pdf = rs.getBinaryStream("archivo_pdf");
+            int longitud = rs.getInt("archivo_pdf_length");
+
+            InputStream finput = rs.getBinaryStream("archivo_pdf");
+            String pdf_final= Utils.blob_to_base64(finput, longitud);
+
+            accountState.setEstadoCuenta(pdf_final);
             accountState.setCorreo(rs.getString("correo"));
         }
         lista.add(accountState);
+        response.setErrorMessage("Success");
+        response.setErrorCode("0");
         response.setAccountStates(lista);
 
         conexion.close();
-        if(counter>0){
+        if (counter > 0) {
             return response;
-        }else{
-            return  null;
+        } else {
+            return null;
         }
+
     }
 
     public static EstadoCuenta EstadoCuentaOrionPrivada(String remoteOrionJndi, String pais, String identificacion,
                                                         String numeroTarjeta, String fechaCorte) throws Exception {
-        String query1 = " SELECT  iefp.pdffile as archivo_pdf, ' ' as correo " +
+        String query1 = " SELECT   iefp.pdffile as archivo_pdf , ' ' as correo," +
+                "dbms_lob.getlength(iefp.pdffile) as archivo_pdf_length  " +
                 "FROM ESTCTASV.t_isim_estcta_files_pdf iefp " +
                 "WHERE iefp.idcard = ? AND iefp.customerid = ? AND date_file = ? ";
-        String query2 = " SELECT  iefp.pdffile as archivo_pdf, ' ' as correo " +
+        String query2 = " SELECT   iefp.pdffile as archivo_pdf , ' ' as correo," +
+                "dbms_lob.getlength(iefp.pdffile) as archivo_pdf_length  " +
                 "FROM ESTCTAGT.t_isim_estcta_files_pdf iefp " +
                 "WHERE iefp.idcard = ? AND iefp.customerid = ? AND date_file = ? ";
-        String query3 = " SELECT iefp.pdffile as archivo_pdf, ' ' as correo  " +
+        String query3 = " SELECT  iefp.pdffile as archivo_pdf , ' ' as correo ," +
+                "dbms_lob.getlength(iefp.pdffile) as archivo_pdf_length  " +
                 "FROM ESTCTANI.t_isim_estcta_files_pdf iefp " +
                 "WHERE iefp.idcard = ? AND iefp.customerid = ? AND date_file = ? ";
-        String query4 = " SELECT iefp.pdffile as archivo_pdf, ' ' as correo  " +
+        String query4 = " SELECT  iefp.pdffile as archivo_pdf , ' ' as correo , " +
+                "dbms_lob.getlength(iefp.pdffile) as archivo_pdf_length   " +
                 "FROM ESTCTACR.t_isim_estcta_files_pdf iefp " +
                 "WHERE iefp.idcard = ? AND iefp.customerid = ? AND date_file = ? ";
         ConnectionHandler connectionHandler = new ConnectionHandler();
@@ -265,17 +292,19 @@ public class ConsultaEstadoCuenta {
 
         while (rs.next()) {
             counter++;
-            accountState.setEstadoCuenta(rs.getString("archivo_pdf"));
+
+            Blob pdf = rs.getBlob("archivo_pdf");
+            accountState.setEstadoCuenta(pdf.toString());
             accountState.setCorreo(rs.getString("correo"));
         }
         lista.add(accountState);
         response.setAccountStates(lista);
 
         conexion.close();
-        if(counter>0){
+        if (counter > 0) {
             return response;
-        }else {
-            return  null;
+        } else {
+            return null;
         }
 
     }

@@ -54,20 +54,19 @@ public class ListadoTarjetas {
         }
 
         try {
-            List<Tarjetas> response3 = null;
-            response3 = obtenerDatosSiscard(pais, identificacion, siscardUrl);
-            log.info("tarjetas evertec: " + response3.size());
-            if (response3 != null) {
-                log.info("EVERTEC");
-                return estructura(response3);
-            }
-
+            //all code here
             List<Tarjetas> response2 = obtenerDatosArca(identificacion, remoteJndiSunnel);
             if (response2 != null) {
                 log.info("ARCA");
                 return estructura(response2);
             }
-
+            List<Tarjetas> response3 = null;
+            response3 = obtenerDatosSiscard(pais, identificacion, siscardUrl);
+            if (response3 != null) {
+                log.info("tarjetas evertec: " + response3.size());
+                log.info("EVERTEC");
+                return estructura(response3);
+            }
 
             return message.genericMessage("ERROR", "400", "La consulta no devolvio resultados.", namespace, operationResponse);
 
@@ -209,7 +208,7 @@ public class ListadoTarjetas {
                 "       INNER JOIN SUNNELP3.t_gcreditline cl " +
                 "          ON cl.creditlineid = a.accountid " +
                 "       INNER JOIN SUNNELP3.t_gcreditlinepartition clp " +
-                "          ON cl.creditlineid = clp.creditlineid " +
+                "          ON cl.creditlineid = clp.creditlineid AND clp.creditlinepartitiontypeid = 355 " +
                 "       LEFT OUTER JOIN (  SELECT clt.creditlineid, " +
                 "                                 MAX (bpt.paymentdate) AS fechaPago " +
                 "                            FROM    SUNNELP3.t_gbillingperiod bpt " +
@@ -242,7 +241,8 @@ public class ListadoTarjetas {
                 "                                    + fbt.contingentinterest) " +
                 "                                    AS pagoMinimo, " +
                 "                                 SUM ( " +
-                "                                      fbt.periodamountdue " +
+                "                                      fbt.regularbalance  " +
+                "                                    + fbt.periodamountdue " +
                 "                                    + fbt.regularinterest " +
                 "                                    + fbt.regularinteresttax " +
                 "                                    + fbt.overduebalance " +

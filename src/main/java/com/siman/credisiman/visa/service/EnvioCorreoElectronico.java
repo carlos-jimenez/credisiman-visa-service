@@ -22,18 +22,13 @@ import java.util.List;
 
 public class EnvioCorreoElectronico {
 
-    private static Logger log = LoggerFactory.getLogger(EnvioCorreoElectronico.class);
+    private static final Logger log = LoggerFactory.getLogger(EnvioCorreoElectronico.class);
     private static final String namespace = "http://siman.com/EnvioCorreoElectronico";
     private static final String operationResponse = "ObtenerEnvioCorreoElectronicoResponse";
 
-    private static final String url="https://mandrillapp.com/api/1.0/messages/send.json";
-
-    private static final String mandrilTag="NotificacionCredisiman";
-
-    private  static final String apiKey = "md-jHsAPNoQFFypCiypPY0Flw";
-
     public static XmlObject send(String correoOrigen, String nombreOrigen, String asunto,
-                                 boolean flagImportante, String html, String listaCorreos) {
+                                 boolean flagImportante, String html, String listaCorreos,
+                                 String urlMandril, String apiKey, String mandrilTag) {
         //validar campos requeridos
         Utils utils = new Utils();
         Message message = new Message();
@@ -101,7 +96,7 @@ public class EnvioCorreoElectronico {
             log.info(json.toString());
 
             HttpResponse<String> jsonResponse //realizar petición demiante unirest
-                    = Unirest.post(url)
+                    = Unirest.post(urlMandril)
                     .header("Content-Type", "application/json")
                     .body(json.toString())
                     .asString();

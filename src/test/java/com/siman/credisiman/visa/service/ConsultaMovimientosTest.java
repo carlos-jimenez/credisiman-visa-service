@@ -19,14 +19,18 @@ public class ConsultaMovimientosTest {
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
+    }
 
-        //Data
-//        XmlObject[] movimientos = result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:movimientos");
-//        while (i < movimientos.length) {
-//            String numeroAutorizacion = ((SimpleValue) movimientos[i].selectPath("declare namespace ns='" + NS + "' " + ".//ns:numeroAutorizacion")[0]).getStringValue();
-//            assertEquals(ListadoNumeroAutorizacion[i], numeroAutorizacion);
-//            i++;
-//        }
+    @Test
+    public void obtenerConsultaMovimientosPrivadaGTOk() {
+        XmlObject result = ConsultaMovimientos.obtenerConsultaMovimientos("GT",
+                "6008324000363591", "20180101", "20221231",
+                "jdbc/SUNTSTGT", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion",
+                "usuario", "600831, 600831, 600831", "P");
+
+        //Status
+        assertEquals("00", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
+        assertEquals("SUCCESS", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
     }
 
     @Test
@@ -39,13 +43,5 @@ public class ConsultaMovimientosTest {
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
-
-        //Data
-//        XmlObject[] movimientos = result.selectPath("declare namespace ns='" + NS + "' " + ".//ns:movimientos");
-//        while (i < movimientos.length) {
-//            String numeroAutorizacion = ((SimpleValue) movimientos[i].selectPath("declare namespace ns='" + NS + "' " + ".//ns:numeroAutorizacion")[0]).getStringValue();
-//            assertEquals(ListadoNumeroAutorizacion[i], numeroAutorizacion);
-//            i++;
-//        }
     }
 }

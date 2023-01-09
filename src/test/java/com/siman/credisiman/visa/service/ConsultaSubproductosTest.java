@@ -8,23 +8,26 @@ import static org.junit.Assert.assertEquals;
 
 public class ConsultaSubproductosTest {
     static private final String NS = "http://siman.com/ConsultaSubproductos";
-//    static String[] listadoTarjetas = {"20220718", "20220717", "20220716"};
 
     @Test
     public void obtenerConsultaSubProductosOk() {
-        XmlObject result = ConsultaSubproductos.obtenerConsultaSubproductos("SV", "4573840079870646", "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion", "usuario", "600831, 600831, 600831","V");
-//        int i = 0;
-
+        XmlObject result = ConsultaSubproductos.obtenerConsultaSubproductos("SV", "4573840079870646",
+                "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion",
+                "usuario", "600831, 600831, 600831","V","https://api-crm.siman.com",
+                "S4l3$force","$2a$10$lH7.4sT65MvGIkbr3buMpunEkmjc6fW735baDiwcvP8I7QJq3VUFe");
         //Status
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
+    }
 
-        //Data
-//        XmlObject[] subproductos = result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:subproductos");
-//        while (i < subproductos.length) {
-//            String fechaCompra = ((SimpleValue) subproductos[i].selectPath( "declare namespace ns='" + NS + "' " + ".//ns:fechaCompra")[0]).getStringValue();
-//            assertEquals(listadoTarjetas[i], fechaCompra);
-//            i++;
-//        }
+    @Test
+    public void obtenerConsultaSubProductosPrivadaOk() {
+        XmlObject result = ConsultaSubproductos.obtenerConsultaSubproductos("SV", "4573840028591061",
+                "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion",
+                "usuario", "600831, 600831, 600831","P","https://api-crm.siman.com",
+                "S4l3$force","$2a$10$lH7.4sT65MvGIkbr3buMpunEkmjc6fW735baDiwcvP8I7QJq3VUFe");
+        //Status
+        assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
+        assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
     }
 }

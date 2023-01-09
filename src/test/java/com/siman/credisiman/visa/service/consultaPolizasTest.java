@@ -18,6 +18,16 @@ public class consultaPolizasTest {
         assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
         assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
     }
+
+    @Test
+    public void obtenerConsultaPolizasPrivadaGTOk() {
+        XmlObject result = ConsultaPolizas.obtenerConsultaPolizas("GT", "6008324000363591",
+                "jdbc/SUNTSTGT", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion",
+                "usuario", "600831, 600831, 600831", "P");
+        //Status
+        assertEquals("00", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:statusCode")[0]).getStringValue());
+        assertEquals("SUCCESS", ((SimpleValue) result.selectPath( "declare namespace ns='" + NS + "' " + ".//ns:status")[0]).getStringValue());
+    }
     @Test
     public void obtenerConsultaPolizasPrivadaOk() {
         XmlObject result = ConsultaPolizas.obtenerConsultaPolizas("SV", "6008310100104100",

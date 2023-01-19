@@ -11,7 +11,7 @@ public class ConsultaMovimientosTest {
 
     @Test
     public void obtenerConsultaMovimientosPrivadaOk() {
-        XmlObject result = ConsultaMovimientos.obtenerConsultaMovimientos("SLV",
+        XmlObject result = ConsultaMovimientos.obtenerConsultaMovimientos("SV",
                 "6008314502274917", "20180101", "20221231",
                 "jdbc/SUNTST", "jdbc/ORIONREPOSV", "http://soauat.siman.com:7003/v1/orion",
                 "usuario", "600831, 600831, 600831", "P");
